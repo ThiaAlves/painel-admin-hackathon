@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ReactNode } from "react"
 import { validaPermissao } from "../../services/validaPermissao";
 import { destroyCookie } from 'nookies'
+import { BsPieChartFill, BsFillPersonFill, BsDoorOpen } from 'react-icons/bs';
 
 interface InterfProps {
     children: ReactNode;
@@ -37,7 +38,7 @@ export const Menu = ({
                             className="nav-link px-3"
                             href=""
                             onClick={() => { destroyCookie(null, 'painel-token')}}
-                        >Sair</a>
+                        ><BsDoorOpen/> Sair</a>
                     </div>
                 </div>
             </header>
@@ -58,13 +59,13 @@ export const Menu = ({
                             {
                                 validaPermissao(token, ['admin', 'colaborador']) &&
                                 <li
-                                    className="nav-item"
+                                    className="nav-item pt-4"
                                 >
                                     <Link href={'/dashboard'}>
                                         <a
                                             className={`nav-link ${active === 'dashboard' && 'active'}`}
                                         >
-                                            Dashboard
+                                            <BsPieChartFill/> Dashboard
                                         </a>
                                     </Link>
                                 </li>
@@ -77,7 +78,7 @@ export const Menu = ({
                                     <a
                                         className={`nav-link ${active === 'usuario' && 'active'}`}
                                     >
-                                        Usuário
+                                        <BsFillPersonFill/> Usuário
                                     </a>
                                 </Link>
                             </li>

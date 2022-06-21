@@ -121,7 +121,7 @@ export default function Usuario(props: interfProps) {
                 active='usuario'
                 token={props.token}
             >
-                <h2 className="">Usuário - {estaEditando ? 'Editar' : 'Adicionar'}</h2>
+                <h2 className="pt-4">{estaEditando ? 'Editar' : 'Cadastrar'} Usuário</h2>
 
                 <form
                     className='row g-3 needs-validation'
