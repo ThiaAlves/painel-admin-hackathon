@@ -36,6 +36,8 @@ export default function Login() {
             <Head>
                 <title>Login</title>
             </Head>
+            <div className="login">
+
 
             <div
                 style={{
@@ -52,6 +54,7 @@ export default function Login() {
                         border: 2,
                         borderColor: '#ccc',
                         borderStyle: 'solid',
+                        backgroundColor: '#fff',
                         borderRadius: 8,
                         padding: 20,
                         maxWidth: 400
@@ -138,6 +141,7 @@ export default function Login() {
                         </div>
                     </form>
                 </div>
+            </div>
             </div>
         </>
     )

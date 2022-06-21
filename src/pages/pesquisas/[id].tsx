@@ -5,7 +5,6 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Menu } from "../../components/Menu";
 import api from "../../services/request";
 import { validaPermissao } from "../../services/validaPermissao";
-import { BsCheckLg, BsXLg } from "react-icons/bs";
 
 interface interfProps {
     token?: string;
@@ -31,11 +30,11 @@ export default function Usuario(props: interfProps) {
                 const id = refForm.current.elements[i].id;
                 const value = refForm.current.elements[i].value;
 
-                if(id === 'botao' || (id === 'senha' && value === '')) break;
+                if(id === 'botao' || (id === 'status' && value === '')) break;
                 obj[id] = value;
             }
 
-            api.put(`/pessoas/${id}`, obj, {
+            api.put(`/pesquisas/${id}`, obj, {
                 headers: {
                     'Authorization': `Bearer ${props.token}`
                 }
@@ -58,7 +57,7 @@ export default function Usuario(props: interfProps) {
         if(Number.isInteger(idParam)) {
             setEstaEditando(true);
 
-            api.get('/pessoas/'+idParam, {
+            api.get('/pesquisas/'+idParam, {
                 headers: {
                     'Authorization': `Bearer ${props.token}`
                 }
@@ -98,7 +97,7 @@ export default function Usuario(props: interfProps) {
 
             }
 
-            api.post('/pessoas/', obj, {
+            api.post('/pesquisas/', obj, {
                 headers: {
                     'Authorization': `Bearer ${props.token}`
                 }
@@ -125,7 +124,7 @@ export default function Usuario(props: interfProps) {
                 <h2 className="pt-4">{estaEditando ? 'Editar' : 'Cadastrar'} Usuário</h2>
 
                 <form
-                    className='row g-3 needs-validation pt-2 m-4'
+                    className='row g-3 needs-validation pt-4'
                     noValidate
                 ref={refForm}
                 >
@@ -352,7 +351,7 @@ export default function Usuario(props: interfProps) {
                     </div>
 
                     <div
-                        className='col-md-4'
+                        className='col-md-3'
                     >
                         <label
                             htmlFor='cidade'
@@ -399,23 +398,8 @@ export default function Usuario(props: interfProps) {
                     <div
                         className='col-md-12'
                     >
-
-                <div className=' text-end'>
-                    <div className='col'>
-                    <button
-                        type='button'
-                        className='btn btn-danger m-1 rounded-pill'
-                        onClick={() => {
-                            this.props.history.push('/usuario');
-                        }
-                        }
-                    >
-                        <BsXLg/> Cancelar
-                    </button>
-
-
                         <button
-                            className='btn btn-success m-1 rounded-pill'
+                            className='btn btn-primary mt-3'
                             type='submit'
                             id='botao'
                         onClick={(e) => {
@@ -425,10 +409,8 @@ export default function Usuario(props: interfProps) {
                         }
                         }
                         >
-                           <BsCheckLg/> Enviar
+                            Enviar
                         </button>
-                        </div>
-                    </div>
                     </div>
                 </form>
 

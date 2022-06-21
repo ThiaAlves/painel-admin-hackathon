@@ -32,21 +32,21 @@ export default function Usuario(props: interfProps) {
     const [usuarios, setUsuarios] = useState<Array<interfUsuario>>([]);
 
     function deleteUser(id: number) {
-        api.delete(`/pessoas/${id}`, {
+        api.delete(`/pesquisas/${id}`, {
             headers: {
                 Authorization: "Bearer " + props.token,
             },
         })
             .then((res) => {
-                findUser();
+                findPesquisa();
             })
             .catch((erro) => {
                 console.log(erro);
             });
     }
 
-    function findUser() {
-        api.get("/pessoas", {
+    function findPesquisa() {
+        api.get("/pesquisas", {
             headers: {
                 Authorization: "Bearer " + props.token,
             },
@@ -60,7 +60,7 @@ export default function Usuario(props: interfProps) {
     }
 
     useEffect(() => {
-        findUser();
+        findPesquisa();
     }, []);
     return(
         <>
@@ -89,8 +89,8 @@ export default function Usuario(props: interfProps) {
                     <thead>
                         <tr>
                             <th><BsHash/> ID</th>
-                            <th><BsFillPersonFill/> Nome</th>
-                            <th><BsMailbox/> E-mail</th>
+                            <th><BsFillPersonFill/> Tema</th>
+                            <th><BsMailbox/> Status</th>
                             <th><BsGear/> Ações</th>
                         </tr>
                     </thead>
