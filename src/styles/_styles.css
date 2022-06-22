@@ -8,6 +8,16 @@ body {
     vertical-align: text-bottom;
 }
 
+.login{
+    background-image: url("https://static.vecteezy.com/system/resources/previews/003/557/256/original/abstract-blue-and-orange-wave-business-background-free-vector.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-position-y: -100px;
+}
+
+
 /*
    * Sidebar
    */
@@ -108,21 +118,4 @@ body {
 
 .navbar, li {
     font-size: 1.2rem;
-}
-
-
-/* Button Login */
-.col-button {
-    text-align: center;
-    margin: 0 1px;
-}
-.log-login img {
-    width: 100%;
-}
-.back-login {
-    background-image: url(https://static.vecteezy.com/system/resources/previews/003/557/256/original/abstract-blue-and-orange-wave-business-background-free-vector.jpg);
-    background-position:  -100px;
-}
-.back-painel-login {
-    background: white;
 }
