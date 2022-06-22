@@ -65,7 +65,7 @@ export default function Usuario(props: interfProps) {
     return(
         <>
             <Head>
-                <title><BsFillPersonFill/> Usuário</title>
+                <title>Usuários</title>
             </Head>
 
             <Menu

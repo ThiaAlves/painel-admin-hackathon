@@ -4,7 +4,7 @@ import { GetServerSideProps } from "next";
 import { parseCookies } from 'nookies';
 import { validaPermissao } from '../../services/validaPermissao';
 import { useContext, useEffect, useState } from 'react';
-import { UsuariosContext } from '../../contexts/ListaUsuarioContext';
+import { PesquisasContext } from '../../contexts/ListaPesquisaContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
 import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg } from 'react-icons/bs';
@@ -13,23 +13,18 @@ interface interfProps {
     token?: string;
 }
 
-interface interfUsuario {
-    bairro?: string;
-    cpf?: string;
-    email: string;
-    endereco?: string;
+interface interfpesquisa {
     id: number;
-    nome: string;
-    numero?: string;
-    telefone: string;
-    tipo: string;
+    tema: string;
+    descricao: string;
+    status?: string;
 }
 
 
-export default function Usuario(props: interfProps) {
+export default function pesquisa(props: interfProps) {
     const router = useRouter();
 
-    const [usuarios, setUsuarios] = useState<Array<interfUsuario>>([]);
+    const [pesquisas, setpesquisas] = useState<Array<interfpesquisa>>([]);
 
     function deleteUser(id: number) {
         api.delete(`/pesquisas/${id}`, {
@@ -52,7 +47,7 @@ export default function Usuario(props: interfProps) {
             },
         })
             .then((res) => {
-                setUsuarios(res.data);
+                setpesquisas(res.data);
             })
             .catch((erro) => {
                 console.log(erro);
@@ -65,22 +60,22 @@ export default function Usuario(props: interfProps) {
     return(
         <>
             <Head>
-                <title><BsFillPersonFill/> Usuário</title>
+                <title>Pesquisa</title>
             </Head>
 
             <Menu
-                active='usuario'
+                active='pesquisa'
                 token={props.token}
             >
                 <>
                     <div
                         className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 border-bottom"
                     >
-                        <h2><BsFillPersonFill/> Usuário</h2>
+                        <h2><BsFillPersonFill/> Pesquisas</h2>
                         <div
                             className="btn-toolbar mb-2 mb-md-0"
                         >
-                            <button type="button" onClick={() => router.push('/usuario/novo')}
+                            <button type="button" onClick={() => router.push('/pesquisa/novo')}
                             className="btn btn-success rounded-pill"><BsPlusLg/> Adicionar</button>
                         </div>
                     </div>
@@ -90,26 +85,28 @@ export default function Usuario(props: interfProps) {
                         <tr>
                             <th><BsHash/> ID</th>
                             <th><BsFillPersonFill/> Tema</th>
+                            <th><BsFillPersonFill/> Descrição</th>
                             <th><BsMailbox/> Status</th>
                             <th><BsGear/> Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {usuarios.map((usuario: interfUsuario) => (
-                            <tr key={usuario.id}>
-                                <td width="10%" className="text-center">{usuario.id}</td>
-                                <td width="40%">{usuario.nome}</td>
-                                <td width="40%">{usuario.email}</td>
+                        {pesquisas.map((pesquisa: interfpesquisa) => (
+                            <tr key={pesquisa.id}>
+                                <td width="10%" className="text-center">{pesquisa.id}</td>
+                                <td width="30%">{pesquisa.tema}</td>
+                                <td width="40%">{pesquisa.descricao}</td>
+                                <td width="10%">{pesquisa.status === '1' ? 'Ativo' : 'Inativo'}</td>
                                 <td width="10%">
                                     <button type="button" className="rounded-pill btn btn-primary btn-sm m-1"
                                     onClick={() => {
-                                        router.push(`/usuario/${usuario.id}`)
+                                        router.push(`/pesquisa/${pesquisa.id}`)
                                     }}
                                     ><BsPencil/></button>
                                        <button
                                             className="rounded-pill btn btn-danger btn-sm m-1"
                                             onClick={() => {
-                                                deleteUser(usuario.id);
+                                                deleteUser(pesquisa.id);
                                             }}
                                         >
                                             <BsTrash />

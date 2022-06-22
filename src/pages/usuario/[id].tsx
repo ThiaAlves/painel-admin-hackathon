@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import Head from 'next/head';
 import { useRouter } from "next/router"
 import { parseCookies } from "nookies";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
@@ -73,6 +74,9 @@ export default function Usuario(props: interfProps) {
                     refForm.current['bairro'].value = res.data?.bairro || '';
                     refForm.current['endereco'].value = res.data?.endereco || '';
                     refForm.current['numero'].value = res.data?.numero || '';
+                    refForm.current['cep'].value = res.data?.cep || '';
+                    refForm.current['estado'].value = res.data?.estado || '';
+                    refForm.current['cidade'].value = res.data?.cidade || '';
 
                 }
 
@@ -118,6 +122,9 @@ export default function Usuario(props: interfProps) {
 
     return (
         <>
+        <Head>
+            <title>{estaEditando ? 'Editar' : 'Cadastrar'} Usuário</title>
+        </Head>
             <Menu
                 active='usuario'
                 token={props.token}
@@ -181,7 +188,31 @@ export default function Usuario(props: interfProps) {
                         </div>
                     </div>
                     <div
-                        className='col-md-6'
+                        className='col-md-4'
+                    >
+                        <label
+                            htmlFor='telefone'
+                            className='form-label'
+                        >
+                            Telefone:
+                        </label>
+                        <div
+                            className='input-group has-validation'
+                        >
+                            <input
+                                type='number'
+                                className='form-control'
+                                placeholder='Digite o telefone'
+                                id="telefone"
+                                // required
+                            />
+                            <div className='invalid-feedback'>
+                                Por favor, informe seu número.
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        className='col-md-4'
                     >
                         <label
                             htmlFor='cpf'
@@ -206,7 +237,7 @@ export default function Usuario(props: interfProps) {
                     </div>
 
                     <div
-                        className='col-md-6'
+                        className='col-md-4'
                     >
                         <label
                             htmlFor='tipo'
@@ -406,7 +437,7 @@ export default function Usuario(props: interfProps) {
                         type='button'
                         className='btn btn-danger m-1 rounded-pill'
                         onClick={() => {
-                            this.props.history.push('/usuario');
+                            router.push('/usuario')
                         }
                         }
                     >
