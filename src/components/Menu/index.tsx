@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ReactNode } from "react"
 import { validaPermissao } from "../../services/validaPermissao";
 import { destroyCookie } from 'nookies'
-import { BsPieChartFill, BsFillPersonFill, BsDoorOpen, BsSearch } from 'react-icons/bs';
+import { BsPieChartFill, BsFillPersonFill, BsDoorOpen, BsSearch, BsFillQuestionCircleFill } from 'react-icons/bs';
 
 interface InterfProps {
     children: ReactNode;
@@ -79,11 +79,26 @@ export const Menu = ({
                                         <a
                                             className={`nav-link ${active === 'pesquisa' && 'active'}`}
                                         >
-                                            <BsSearch /> Pesquisa
+                                            <BsSearch /> Pesquisas
                                         </a>
                                     </Link>
                                 </li>
                             }
+
+                            {validaPermissao(token, ['admin', 'colaborador']) &&
+                                <li
+                                    className="nav-item"
+                                >
+                                    <Link href={'/resposta'}>
+                                        <a
+                                            className={`nav-link ${active === 'resposta' && 'active'}`}
+                                        >
+                                            <BsFillQuestionCircleFill /> Respostas
+                                        </a>
+                                    </Link>
+                                </li>
+                            }
+
 
                             {validaPermissao(token, ['admin']) &&
                                 <li

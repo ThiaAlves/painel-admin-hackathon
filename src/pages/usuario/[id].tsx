@@ -474,7 +474,7 @@ export const getServerSideProps: GetServerSideProps = async (contexto) => {
 
     const { 'painel-token': token } = parseCookies(contexto);
 
-    console.log(token)
+    // console.log(token)
 
     if (!token) {
         return {

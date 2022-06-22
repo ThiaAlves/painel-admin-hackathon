@@ -16,6 +16,7 @@ interface InterDados {
     descricao: string;
     perguntas: string;
     status: string;
+    created_at: string;
 }
 
 export type PropsPesquisasInput = Omit<InterDados, 'id'>
