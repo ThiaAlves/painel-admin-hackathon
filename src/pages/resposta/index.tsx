@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import { RespostasContext } from '../../contexts/ListaRespostaContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
-import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsSearch, BsCalendarXFill, BsCalendar, BsCheck } from 'react-icons/bs';
+import { BsTrash, BsPencil, BsGear, BsEye, BsFillPersonFill, BsHash, BsPlusLg, BsSearch, BsCalendarXFill, BsCalendar, BsCheck } from 'react-icons/bs';
 
 interface interfProps {
     token?: string;
@@ -101,12 +101,12 @@ export default function resposta(props: interfProps) {
                                 <td width="25%">{resposta.created_at}</td>
                                 <td width="10%">{resposta.status === '1' ? 'Ativo' : 'Inativo'}</td>
                                 <td width="10%">
-                                    <button type="button" className="rounded-pill btn btn-primary btn-sm m-1"
+                                    <button type="button" className="rounded-pill btn btn-info btn-sm m-1"
                                     onClick={() => {
                                         router.push(`/resposta/${resposta.id}`)
                                     }}
-                                    ><BsPencil/></button>
-                                       <button
+                                    ><BsEye/></button>
+                                       <button hidden
                                             className="rounded-pill btn btn-danger btn-sm m-1"
                                             onClick={() => {
                                                 deleteUser(resposta.id);

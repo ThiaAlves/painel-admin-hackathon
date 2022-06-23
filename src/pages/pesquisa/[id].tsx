@@ -42,7 +42,7 @@ export default function Usuario(props: interfProps) {
                 }
             })
                 .then(() => {
-                    router.push('/usuario');
+                    router.push('/pesquisa');
                 })
                 .catch((erro) => {
                     console.log(erro);
@@ -66,9 +66,19 @@ export default function Usuario(props: interfProps) {
             }).then((res) => {
 
                 if (res.data) {
+
+                    var perguntas = res.data.perguntas;
+                    perguntas = perguntas.split('|');
+                    var pergunta1 = perguntas[0];
+                    var pergunta2 = perguntas[1];
+                    var pergunta3 = perguntas[2];
+
+
                     refForm.current['tema'].value = res.data.tema;
                     refForm.current['descricao'].value = res.data.descricao;
-                    refForm.current['perguntas'].value = res.data.perguntas;
+                    refForm.current['pergunta1'].value = pergunta1;
+                    refForm.current['pergunta2'].value = pergunta2;
+                    refForm.current['pergunta3'].value = pergunta3;
                     refForm.current['status'].value = res.data.status;
                 }
 
@@ -100,7 +110,7 @@ export default function Usuario(props: interfProps) {
                 }
             })
                 .then((res) => {
-                    router.push('/usuario');
+                    router.push('/pesquisa');
 
                 }).catch((erro) => {
                     console.log(erro);
@@ -118,7 +128,7 @@ export default function Usuario(props: interfProps) {
                 <title>{estaEditando ? 'Editar' : 'Cadastrar'} Pesquisa</title>
             </Head>
             <Menu
-                active='usuario'
+                active='pesquisa'
                 token={props.token}
             >
                 <h2 className="pt-4">{estaEditando ? 'Editar' : 'Cadastrar'} Pesquisa</h2>

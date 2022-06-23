@@ -66,8 +66,8 @@ export default function Usuario(props: interfProps) {
             }).then((res) => {
 
                 if (res.data) {
-                    refForm.current['pessoa_id'].value = res.data[0].id_pessoa;
-                    refForm.current['pesquisa_id'].value = res.data[0].id_pesquisa;
+                    refForm.current['nome_pessoa'].value = res.data[0].nome_pessoa;
+                    refForm.current['tema_pesquisa'].value = res.data[0].tema_pesquisa;
                     refForm.current['descricao'].value = res.data[0].descricao;
                     refForm.current['perguntas'].value = res.data[0].perguntas;
                     refForm.current['status_resposta'].value = res.data[0].status_resposta;
@@ -116,13 +116,13 @@ export default function Usuario(props: interfProps) {
         <>
 
             <Head>
-                <title>{estaEditando ? 'Editar' : 'Cadastrar'} Resposta</title>
+                <title>{estaEditando ? 'Ver' : 'Cadastrar'} Resposta</title>
             </Head>
             <Menu
                 active='resposta'
                 token={props.token}
             >
-                <h2 className="pt-4">{estaEditando ? 'Editar' : 'Cadastrar'} Resposta</h2>
+                <h2 className="pt-4">{estaEditando ? 'Ver' : 'Cadastrar'} Resposta</h2>
 
                 <form
                     className='row g-3 needs-validation pt-4'
@@ -133,10 +133,10 @@ export default function Usuario(props: interfProps) {
                         className='col-md-12'
                     >
                         <label
-                            htmlFor='pessoa_id'
+                            htmlFor='nome_pessoa'
                             className='form-label'
                         >
-                            pessoa_id:
+                            Nome da Pessoa:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -144,8 +144,8 @@ export default function Usuario(props: interfProps) {
                             <input
                                 type='text'
                                 className='form-control'
-                                placeholder='Informe o pessoa_id'
-                                id="pessoa_id"
+                                placeholder='Informe o nome da pessoa'
+                                id="nome_pessoa"
                                 required
                             />
                         </div>
@@ -158,7 +158,7 @@ export default function Usuario(props: interfProps) {
                             htmlFor='pesquisa_id'
                             className='form-label'
                         >
-                            id_pesquisa:
+                            tema_pesquisa:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -166,35 +166,9 @@ export default function Usuario(props: interfProps) {
                             <input
                                 type='text'
                                 className='form-control'
-                                placeholder='Informe o pessoa_id'
-                                id="pesquisa_id"
+                                id="tema_pesquisa"
                                 required
                             />
-                        </div>
-                    </div>
-
-                    <div
-                        className='col-md-12'
-                    >
-                        <label
-                            htmlFor='descricao'
-                            className='form-label'
-                        >
-                            Descrição:
-                        </label>
-                        <div
-                            className='input-group has-validation'
-                        >
-                            <textarea
-                                className='form-control'
-                                placeholder='Informe a descrição da pesquisa'
-                                id="descricao"
-                                required
-                                rows={3}
-                            />
-                            <div className='invalid-feedback'>
-                                Por favor, informe a descrição da Pesquisa.
-                            </div>
                         </div>
                     </div>
 
