@@ -122,8 +122,9 @@ body {
 .back-login {
     background-image: url(https://static.vecteezy.com/system/resources/previews/003/557/256/original/abstract-blue-and-orange-wave-business-background-free-vector.jpg);
     background-position-y:  -100px;
-    background-repeat: no-repeat;
     background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 .back-painel-login {
     background: white;

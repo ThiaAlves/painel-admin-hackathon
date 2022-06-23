@@ -4,55 +4,51 @@ import { GetServerSideProps } from "next";
 import { parseCookies } from 'nookies';
 import { validaPermissao } from '../../services/validaPermissao';
 import { useContext, useEffect, useState } from 'react';
-import { UsuariosContext } from '../../contexts/ListaUsuarioContext';
+import { RespostasContext } from '../../contexts/ListaRespostaContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
-import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg } from 'react-icons/bs';
+import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsSearch, BsCalendarXFill, BsCalendar, BsCheck } from 'react-icons/bs';
 
 interface interfProps {
     token?: string;
 }
 
-interface interfUsuario {
-    bairro?: string;
-    cpf?: string;
-    email: string;
-    endereco?: string;
+interface interfresposta {
     id: number;
-    nome: string;
-    numero?: string;
-    telefone: string;
-    tipo: string;
+    pessoa: string;
+    pesquisa: string;
+    status?: string;
+    created_at?: string;
 }
 
 
-export default function Usuario(props: interfProps) {
+export default function resposta(props: interfProps) {
     const router = useRouter();
 
-    const [usuarios, setUsuarios] = useState<Array<interfUsuario>>([]);
+    const [respostas, setrespostas] = useState<Array<interfresposta>>([]);
 
     function deleteUser(id: number) {
-        api.delete(`/pessoas/${id}`, {
+        api.delete(`/respostas/${id}`, {
             headers: {
                 Authorization: "Bearer " + props.token,
             },
         })
             .then((res) => {
-                findUser();
+                findResposta();
             })
             .catch((erro) => {
                 console.log(erro);
             });
     }
 
-    function findUser() {
-        api.get("/pessoas", {
+    function findResposta() {
+        api.get("/respostas", {
             headers: {
                 Authorization: "Bearer " + props.token,
             },
         })
             .then((res) => {
-                setUsuarios(res.data);
+                setrespostas(res.data);
             })
             .catch((erro) => {
                 console.log(erro);
@@ -60,27 +56,27 @@ export default function Usuario(props: interfProps) {
     }
 
     useEffect(() => {
-        findUser();
+        findResposta();
     }, []);
     return(
         <>
             <Head>
-                <title>Usuários</title>
+                <title>Resposta</title>
             </Head>
 
             <Menu
-                active='usuario'
+                active='resposta'
                 token={props.token}
             >
                 <>
                     <div
                         className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 border-bottom"
                     >
-                        <h2><BsFillPersonFill/> Usuário</h2>
+                        <h2><BsFillPersonFill/> Respostas</h2>
                         <div
                             className="btn-toolbar mb-2 mb-md-0"
                         >
-                            <button type="button" onClick={() => router.push('/usuario/novo')}
+                            <button type="button" onClick={() => router.push('/resposta/novo')}
                             className="btn btn-success rounded-pill"><BsPlusLg/> Adicionar</button>
                         </div>
                     </div>
@@ -89,27 +85,31 @@ export default function Usuario(props: interfProps) {
                     <thead>
                         <tr>
                             <th><BsHash/> ID</th>
-                            <th><BsFillPersonFill/> Nome</th>
-                            <th><BsMailbox/> E-mail</th>
+                            <th><BsFillPersonFill/> Pessoa</th>
+                            <th><BsSearch/> Pesquisa</th>
+                            <th><BsCalendar/> Data de criação</th>
+                            <th><BsCheck/> Status</th>
                             <th><BsGear/> Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {usuarios.map((usuario: interfUsuario) => (
-                            <tr key={usuario.id}>
-                                <td width="10%" className="text-center">{usuario.id}</td>
-                                <td width="40%">{usuario.nome}</td>
-                                <td width="40%">{usuario.email}</td>
+                        {respostas.map((resposta: interfresposta) => (
+                            <tr key={resposta.id}>
+                                <td width="5%" className="text-center">{resposta.id}</td>
+                                <td width="20%">{resposta.pessoa}</td>
+                                <td width="30%">{resposta.pesquisa}</td>
+                                <td width="25%">{resposta.created_at}</td>
+                                <td width="10%">{resposta.status === '1' ? 'Ativo' : 'Inativo'}</td>
                                 <td width="10%">
                                     <button type="button" className="rounded-pill btn btn-primary btn-sm m-1"
                                     onClick={() => {
-                                        router.push(`/usuario/${usuario.id}`)
+                                        router.push(`/resposta/${resposta.id}`)
                                     }}
                                     ><BsPencil/></button>
                                        <button
                                             className="rounded-pill btn btn-danger btn-sm m-1"
                                             onClick={() => {
-                                                deleteUser(usuario.id);
+                                                deleteUser(resposta.id);
                                             }}
                                         >
                                             <BsTrash />
