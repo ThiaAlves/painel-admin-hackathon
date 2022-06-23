@@ -32,17 +32,17 @@ export default function Usuario(props: interfProps) {
                 const id = refForm.current.elements[i].id;
                 const value = refForm.current.elements[i].value;
 
-                if (id === 'botao' || (id === 'status' && value === '')) break;
+                if (id === 'botao' || (id === 'status_resposta' && value === '')) break;
                 obj[id] = value;
             }
 
-            api.put(`/pesquisas/${id}`, obj, {
+            api.put(`/respostas/${id}`, obj, {
                 headers: {
                     'Authorization': `Bearer ${props.token}`
                 }
             })
                 .then(() => {
-                    router.push('/usuario');
+                    router.push('/resposta');
                 })
                 .catch((erro) => {
                     console.log(erro);
@@ -59,17 +59,18 @@ export default function Usuario(props: interfProps) {
         if (Number.isInteger(idParam)) {
             setEstaEditando(true);
 
-            api.get('/pesquisas/' + idParam, {
+            api.get('/respostas/' + idParam, {
                 headers: {
                     'Authorization': `Bearer ${props.token}`
                 }
             }).then((res) => {
 
                 if (res.data) {
-                    refForm.current['tema'].value = res.data.tema;
-                    refForm.current['descricao'].value = res.data.descricao;
-                    refForm.current['perguntas'].value = res.data.perguntas;
-                    refForm.current['status'].value = res.data.status;
+                    refForm.current['pessoa_id'].value = res.data[0].id_pessoa;
+                    refForm.current['pesquisa_id'].value = res.data[0].id_pesquisa;
+                    refForm.current['descricao'].value = res.data[0].descricao;
+                    refForm.current['perguntas'].value = res.data[0].perguntas;
+                    refForm.current['status_resposta'].value = res.data[0].status_resposta;
                 }
 
             }).catch((erro) => {
@@ -94,7 +95,7 @@ export default function Usuario(props: interfProps) {
 
             }
 
-            api.post('/pesquisas/', obj, {
+            api.post('/respostas/', obj, {
                 headers: {
                     'Authorization': `Bearer ${props.token}`
                 }
@@ -115,13 +116,13 @@ export default function Usuario(props: interfProps) {
         <>
 
             <Head>
-                <title>{estaEditando ? 'Editar' : 'Cadastrar'} Pesquisa</title>
+                <title>{estaEditando ? 'Editar' : 'Cadastrar'} Resposta</title>
             </Head>
             <Menu
-                active='usuario'
+                active='resposta'
                 token={props.token}
             >
-                <h2 className="pt-4">{estaEditando ? 'Editar' : 'Cadastrar'} Pesquisa</h2>
+                <h2 className="pt-4">{estaEditando ? 'Editar' : 'Cadastrar'} Resposta</h2>
 
                 <form
                     className='row g-3 needs-validation pt-4'
@@ -132,10 +133,10 @@ export default function Usuario(props: interfProps) {
                         className='col-md-12'
                     >
                         <label
-                            htmlFor='tema'
+                            htmlFor='pessoa_id'
                             className='form-label'
                         >
-                            Tema:
+                            pessoa_id:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -143,15 +144,35 @@ export default function Usuario(props: interfProps) {
                             <input
                                 type='text'
                                 className='form-control'
-                                placeholder='Informe o tema'
-                                id="tema"
+                                placeholder='Informe o pessoa_id'
+                                id="pessoa_id"
                                 required
                             />
-                            <div className='invalid-feedback'>
-                                Por favor, informe o tema.
-                            </div>
                         </div>
                     </div>
+
+                    <div
+                        className='col-md-12'
+                    >
+                        <label
+                            htmlFor='pesquisa_id'
+                            className='form-label'
+                        >
+                            id_pesquisa:
+                        </label>
+                        <div
+                            className='input-group has-validation'
+                        >
+                            <input
+                                type='text'
+                                className='form-control'
+                                placeholder='Informe o pessoa_id'
+                                id="pesquisa_id"
+                                required
+                            />
+                        </div>
+                    </div>
+
                     <div
                         className='col-md-12'
                     >
@@ -184,7 +205,7 @@ export default function Usuario(props: interfProps) {
                             htmlFor='pergunta1'
                             className='form-label'
                         >
-                            Prgunta 1:
+                            Pergunta 1:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -208,7 +229,7 @@ export default function Usuario(props: interfProps) {
                             htmlFor='pergunta2'
                             className='form-label'
                         >
-                            Prgunta 2:
+                            Pergunta 2:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -228,7 +249,7 @@ export default function Usuario(props: interfProps) {
                             htmlFor='pergunta3'
                             className='form-label'
                         >
-                            Prgunta 3:
+                            Pergunta 3:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -246,7 +267,7 @@ export default function Usuario(props: interfProps) {
                         className='col-md-12'
                     >
                         <label
-                            htmlFor='status'
+                            htmlFor='status_resposta'
                             className='form-label'
                         >
                             Status
@@ -254,7 +275,7 @@ export default function Usuario(props: interfProps) {
                         <div
                             className='input-group has-validation'
                         >
-                            <select required className="form-select" defaultValue={""} id='status'>
+                            <select required className="form-select" defaultValue={""} id='status_resposta'>
                                 <option value={""} disabled>Selecione o status</option>
                                 <option value="1">Ativo</option>
                                 <option value="0">Inativo</option>
@@ -274,7 +295,7 @@ export default function Usuario(props: interfProps) {
                                     type='button'
                                     className='btn btn-danger m-1 rounded-pill'
                                     onClick={() => {
-                                        router.push('/pesquisa')
+                                        router.push('/resposta')
                                     }
                                     }
                                 >

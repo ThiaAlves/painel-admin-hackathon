@@ -184,7 +184,7 @@ export default function Usuario(props: interfProps) {
                             htmlFor='pergunta1'
                             className='form-label'
                         >
-                            Prgunta 1:
+                            Pergunta 1:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -208,7 +208,7 @@ export default function Usuario(props: interfProps) {
                             htmlFor='pergunta2'
                             className='form-label'
                         >
-                            Prgunta 2:
+                            Pergunta 2:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -228,7 +228,7 @@ export default function Usuario(props: interfProps) {
                             htmlFor='pergunta3'
                             className='form-label'
                         >
-                            Prgunta 3:
+                            Pergunta 3:
                         </label>
                         <div
                             className='input-group has-validation'

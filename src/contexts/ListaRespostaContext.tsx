@@ -15,7 +15,7 @@ interface InterDados {
     pessoa: string;
     pesquisa: string;
     respostas: string;
-    status: string;
+    status_resposta: string;
 }
 
 export type PropsRespostasInput = Omit<InterDados, 'id'>
