@@ -2,9 +2,12 @@ import Head from "next/head";
 import { FormEvent, useCallback, useContext, useRef } from "react";
 import { AutenticacaoContext } from "../contexts/AutenticacaoContext";
 import { BsKey } from "react-icons/bs";
+import { useRouter } from 'next/router';
 
 export default function Login() {
     const refForm = useRef<any>();
+
+    const router = useRouter();
 
     const { logar } = useContext(AutenticacaoContext);
 
@@ -125,9 +128,9 @@ export default function Login() {
                             <div className="col-md-6 col-button">
                                 <button
                                     className="btn btn-warning mt-3 form-control rounded-pill"
-                                    type="submit"
+                                    type="button"
                                     id="botao"
-                                    onClick={(e) => submitForm(e)}
+                                    onClick={() => router.push('/registro')}
                                 >
                                     Registrar
                                 </button>
