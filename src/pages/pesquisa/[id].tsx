@@ -66,6 +66,7 @@ export default function Usuario(props: interfProps) {
             }).then((res) => {
 
                 if (res.data) {
+                //Aqui dá pra fazer uma mensagem se res.data.status === "Token is Expired"
 
                     var perguntas = res.data.perguntas;
                     perguntas = perguntas.split('|');

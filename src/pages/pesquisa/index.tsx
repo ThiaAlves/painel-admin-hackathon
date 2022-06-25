@@ -47,7 +47,22 @@ export default function pesquisa(props: interfProps) {
             },
         })
             .then((res) => {
+                if(res.data.status === "Token is Expired"){
+                    //Adicionar Mensagem de Login Expirado
+                    alert("Token is Expired");
+                    // Swal.fire({
+                    //     title: 'Token is Expired',
+                    //     text: '',
+                    //     icon: 'error',
+                    //     confirmButtonText: 'OK'
+                    // }).then(() => {
+                    //Voltar para a página de login
+                    //     router.push("/");
+                    // }
+                    // );
+                } else {
                 setpesquisas(res.data);
+                }
             })
             .catch((erro) => {
                 console.log(erro);

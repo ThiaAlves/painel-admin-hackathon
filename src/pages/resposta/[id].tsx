@@ -66,11 +66,16 @@ export default function Usuario(props: interfProps) {
             }).then((res) => {
 
                 if (res.data) {
+                //Aqui dá pra fazer uma mensagem se res.data.status === "Token is Expired"
 
+
+                    var respostas = res.data.resposta.respostas;
                     var perguntas = res.data.perguntas;
                     // var respostas = res.data[0].respostas;
                     // console.log(respostas);
-
+                    var resposta1 = respostas.split('|')[0];
+                    var resposta2 = respostas.split('|')[1];
+                    var resposta3 = respostas.split('|')[2];
 
                     refForm.current['nome_pessoa'].value = res.data.resposta.nome_pessoa;
                     refForm.current['tema_pesquisa'].value = res.data.resposta.tema_pesquisa;

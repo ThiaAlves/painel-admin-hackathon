@@ -7,6 +7,7 @@ import { Menu } from "../../components/Menu";
 import api from "../../services/request";
 import { validaPermissao } from "../../services/validaPermissao";
 import { BsCheckLg, BsXLg } from "react-icons/bs";
+import cep from 'cep-promise'
 
 interface interfProps {
     token?: string;
@@ -64,7 +65,7 @@ export default function Usuario(props: interfProps) {
                     'Authorization': `Bearer ${props.token}`
                 }
             }).then((res) => {
-
+                //Aqui dá pra fazer uma mensagem se res.data.status === "Token is Expired"
                 if(res.data) {
                     refForm.current['nome'].value = res.data.nome;
                     refForm.current['email'].value = res.data.email;
@@ -119,6 +120,14 @@ export default function Usuario(props: interfProps) {
             refForm.current.classList.add('was-validated');
         }
     }, [])
+
+    function setLocalidade(bairro: string, cidade: string, estado: string, endereco: string) {
+        refForm.current['bairro'].value = bairro;
+        refForm.current['cidade'].value = cidade;
+        refForm.current['estado'].value = estado;
+        refForm.current['endereco'].value = endereco;
+        refForm.current['numero'].focus();
+    }
 
     return (
         <>
@@ -259,9 +268,44 @@ export default function Usuario(props: interfProps) {
                             </div>
                         </div>
                     </div>
+                    <div
+                        className='col-md-3'
+                    >
+                        <label
+                            htmlFor='cep'
+                            className='form-label'
+                        >
+                            CEP
+                        </label>
+                        <div
+                            className='input-group has-validation'
+                        >
+                            <input
+                                type='text'
+                                className='form-control'
+                                placeholder='Informe o cep'
+                                id="cep"
+                                required
+                                onKeyUp={(e) => {
+                                    if(e.target.value.length === 8){
+                                        cep(e.target.value).then(res => {
+                                            setLocalidade(res.neighborhood, res.city, res.state, res.street);
+                                    }).catch(err => {
+                                        //Colocar alerta para mensagem de erro
+                                        alert(err);
+                                    });
+                                }
+                                }
+                            }
+                            />
+                            <div className='invalid-feedback'>
+                                Por favor, informe o cep.
+                            </div>
+                        </div>
+                    </div>
 
                     <div
-                        className='col-md-6'
+                        className='col-md-5'
                     >
                         <label
                             htmlFor='endereco'
@@ -272,7 +316,7 @@ export default function Usuario(props: interfProps) {
                         <div
                             className='input-group has-validation'
                         >
-                            <input
+                            <input readOnly
                                 type='text'
                                 className='form-control'
                                 placeholder='Digite o endereco'
@@ -283,7 +327,7 @@ export default function Usuario(props: interfProps) {
                     </div>
 
                     <div
-                        className='col-md-6'
+                        className='col-md-4'
                     >
                         <label
                             htmlFor='bairro'
@@ -294,7 +338,7 @@ export default function Usuario(props: interfProps) {
                         <div
                             className='input-group has-validation'
                         >
-                            <input
+                            <input readOnly
                                 type='text'
                                 className='form-control'
                                 placeholder='Digite o seu bairro'
@@ -307,8 +351,61 @@ export default function Usuario(props: interfProps) {
                         </div>
                     </div>
 
+
+
+
                     <div
-                        className='col-md-2'
+                        className='col-md-4'
+                    >
+                        <label
+                            htmlFor='estado'
+                            className='form-label'
+                        >
+                            Estado
+                        </label>
+                        <div
+                            className='input-group has-validation'
+                        >
+                            <input readOnly
+                                type='text'
+                                className='form-control'
+                                placeholder='Escreva o estado'
+                                id="estado"
+                                required
+                            />
+                            <div className='invalid-feedback'>
+                                Por favor, informe o estado.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        className='col-md-5'
+                    >
+                        <label
+                            htmlFor='cidade'
+                            className='form-label'
+                        >
+                            Cidade
+                        </label>
+                        <div
+                            className='input-group has-validation'
+                        >
+                            <input readOnly
+                                type='text'
+                                className='form-control'
+                                placeholder='Digite a cidade'
+                                id="cidade"
+                                required
+                            />
+                            <div className='invalid-feedback'>
+                                Por favor, informe a cidade.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        className='col-md-3'
                     >
                         <label
                             htmlFor='numero'
@@ -332,80 +429,6 @@ export default function Usuario(props: interfProps) {
                         </div>
                     </div>
 
-                    <div
-                        className='col-md-3'
-                    >
-                        <label
-                            htmlFor='cep'
-                            className='form-label'
-                        >
-                            CEP
-                        </label>
-                        <div
-                            className='input-group has-validation'
-                        >
-                            <input
-                                type='text'
-                                className='form-control'
-                                placeholder='Informe o cep'
-                                id="cep"
-                                required
-                            />
-                            <div className='invalid-feedback'>
-                                Por favor, informe o cep.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        className='col-md-3'
-                    >
-                        <label
-                            htmlFor='estado'
-                            className='form-label'
-                        >
-                            Estado
-                        </label>
-                        <div
-                            className='input-group has-validation'
-                        >
-                            <input
-                                type='text'
-                                className='form-control'
-                                placeholder='Escreva o estado'
-                                id="estado"
-                                required
-                            />
-                            <div className='invalid-feedback'>
-                                Por favor, informe o estado.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        className='col-md-4'
-                    >
-                        <label
-                            htmlFor='cidade'
-                            className='form-label'
-                        >
-                            Cidade
-                        </label>
-                        <div
-                            className='input-group has-validation'
-                        >
-                            <input
-                                type='text'
-                                className='form-control'
-                                placeholder='Digite a cidade'
-                                id="cidade"
-                                required
-                            />
-                            <div className='invalid-feedback'>
-                                Por favor, informe a cidade.
-                            </div>
-                        </div>
-                    </div>
 
                     <div
                         className='col-md-12'
