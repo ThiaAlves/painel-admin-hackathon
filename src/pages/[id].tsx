@@ -3,11 +3,10 @@ import Head from 'next/head';
 import { useRouter } from "next/router"
 import { parseCookies } from "nookies";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
-import { Menu } from "../../components/Menu";
-import api from "../../services/request";
-import { validaPermissao } from "../../services/validaPermissao";
+import { Menu } from "../components/Menu";
+import api from "../services/request";
+import { validaPermissao } from "../services/validaPermissao";
 import { BsCheckLg, BsXLg } from "react-icons/bs";
-import Swal from "sweetalert2";
 
 interface interfProps {
     token?: string;
@@ -43,7 +42,7 @@ export default function Usuario(props: interfProps) {
                 }
             })
             .then(() => {
-                router.push('/usuario');
+                router.push('/registro');
             })
             .catch((erro) => {
                 console.log(erro);
@@ -111,11 +110,6 @@ export default function Usuario(props: interfProps) {
             .then((res) =>
             {
                 router.push('/usuario');
-                Swal.fire(
-                    'Criado com Sucesso!',
-                    'Click em OK!',
-                    'success'
-                )
 
             }).catch((erro) => {
                 console.log(erro);

@@ -8,6 +8,7 @@ import { UsuariosContext } from '../../contexts/ListaUsuarioContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
 import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg } from 'react-icons/bs';
+import Swal from "sweetalert2";
 
 interface interfProps {
     token?: string;
@@ -110,6 +111,11 @@ export default function Usuario(props: interfProps) {
                                             className="rounded-pill btn btn-danger btn-sm m-1"
                                             onClick={() => {
                                                 deleteUser(usuario.id);
+                                                Swal.fire(
+                                                    'Deletado com Sucesso!',
+                                                    'Click em OK!',
+                                                    'success'
+                                                )
                                             }}
                                         >
                                             <BsTrash />

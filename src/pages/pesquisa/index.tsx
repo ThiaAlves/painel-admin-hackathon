@@ -8,6 +8,7 @@ import { PesquisasContext } from '../../contexts/ListaPesquisaContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
 import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg } from 'react-icons/bs';
+import Swal from "sweetalert2";
 
 interface interfProps {
     token?: string;
@@ -26,7 +27,7 @@ export default function pesquisa(props: interfProps) {
 
     const [pesquisas, setpesquisas] = useState<Array<interfpesquisa>>([]);
 
-    function deleteUser(id: number) {
+    function deleteResearch(id: number) {
         api.delete(`/pesquisas/${id}`, {
             headers: {
                 Authorization: "Bearer " + props.token,
@@ -34,6 +35,11 @@ export default function pesquisa(props: interfProps) {
         })
             .then((res) => {
                 findPesquisa();
+                Swal.fire(
+                    'Deletado com Sucesso!',
+                    'Click em OK!',
+                    'error'
+                  )
             })
             .catch((erro) => {
                 console.log(erro);
@@ -106,7 +112,7 @@ export default function pesquisa(props: interfProps) {
                                        <button
                                             className="rounded-pill btn btn-danger btn-sm m-1"
                                             onClick={() => {
-                                                deleteUser(pesquisa.id);
+                                                deleteResearch(pesquisa.id);
                                             }}
                                         >
                                             <BsTrash />

@@ -7,6 +7,7 @@ import { Menu } from "../../components/Menu";
 import api from "../../services/request";
 import { validaPermissao } from "../../services/validaPermissao";
 import { BsXLg, BsCheckLg } from "react-icons/bs";
+import Swal from "sweetalert2";
 
 interface interfProps {
     token?: string;
@@ -43,6 +44,11 @@ export default function Usuario(props: interfProps) {
             })
                 .then(() => {
                     router.push('/usuario');
+                    Swal.fire(
+                        'Salvo com Sucesso!',
+                        'Click em OK!',
+                        'warning'
+                      )
                 })
                 .catch((erro) => {
                     console.log(erro);
@@ -101,6 +107,11 @@ export default function Usuario(props: interfProps) {
             })
                 .then((res) => {
                     router.push('/usuario');
+                    Swal.fire(
+                        'Salvo com Sucesso!',
+                        'Click em OK!',
+                        'success'
+                      )
 
                 }).catch((erro) => {
                     console.log(erro);
