@@ -287,8 +287,9 @@ export default function Usuario(props: interfProps) {
                                 id="cep"
                                 required
                                 onKeyUp={(e) => {
-                                    if(e.target.value.length === 8){
-                                        cep(e.target.value).then(res => {
+                                    const target = e.target as HTMLInputElement;
+                                    if(target.value.length === 8){
+                                        cep(target.value).then(res => {
                                             setLocalidade(res.neighborhood, res.city, res.state, res.street);
                                     }).catch(err => {
                                         //Colocar alerta para mensagem de erro
