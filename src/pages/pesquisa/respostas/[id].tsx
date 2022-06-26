@@ -37,7 +37,7 @@ export default function pesquisa(props: interfProps) {
 
 
     function findPesquisa() {
-        api.get(`v1/respostasPorPesquisa/${id}`, {
+        api.get(`respostasPorPesquisa/${id}`, {
             headers: {
                 Authorization: "Bearer " + props.token,
             },
@@ -107,7 +107,7 @@ const [id_resposta, setId_resposta] = useState('');
     function updatePesquisa(){
         event.preventDefault();
 
-        api.put(`atualizaResposta/${id_resposta}`, {
+        api.post(`atualizaResposta/${id_resposta}`, {
             headers: {
                 Authorization: "Bearer " + props.token,
             },
@@ -135,6 +135,7 @@ const [id_resposta, setId_resposta] = useState('');
                 }
                 );
             }
+            console.log(res.data);
         }).catch((erro) => {
             console.log(erro);
         });

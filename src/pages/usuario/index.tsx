@@ -8,7 +8,7 @@ import { UsuariosContext } from '../../contexts/ListaUsuarioContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
 import Swal from "sweetalert2";
-import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsShieldX, BsShieldFill, BsShieldCheck, BsPeopleFill } from 'react-icons/bs';
+import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsShieldX, BsShieldFill, BsShieldCheck, BsPeopleFill, BsQuestionSquare } from 'react-icons/bs';
 
 interface interfProps {
     token?: string;
@@ -24,6 +24,7 @@ interface interfUsuario {
     numero?: string;
     telefone: string;
     tipo: string;
+    total_pesquisas_respondidas: number;
 }
 
 
@@ -109,6 +110,7 @@ export default function Usuario(props: interfProps) {
                             <th><BsFillPersonFill/> Nome</th>
                             <th><BsMailbox/> E-mail</th>
                             <th><BsShieldFill/> Tipo</th>
+                            <th><BsQuestionSquare/> Respostas</th>
                             <th><BsGear/> Ações</th>
                         </tr>
                     </thead>
@@ -116,10 +118,11 @@ export default function Usuario(props: interfProps) {
                         {usuarios.map((usuario: interfUsuario) => (
                             <tr key={usuario.id}>
                                 <td width="10%" className="text-center">{usuario.id}</td>
-                                <td width="40%">{usuario.nome}</td>
-                                <td width="30%">{usuario.email}</td>
+                                <td width="30%">{usuario.nome}</td>
+                                <td width="20%">{usuario.email}</td>
                                 <td width="10%">{getTipo(usuario.tipo)}</td>
-                                <td width="10%">
+                                <td width="15%" className="text-center">{usuario.total_pesquisas_respondidas}</td>
+                                <td width="15%">
                                     <button type="button" className="rounded-pill btn btn-primary btn-sm m-1"
                                     onClick={() => {
                                         router.push(`/usuario/${usuario.id}`)

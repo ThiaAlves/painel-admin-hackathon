@@ -18,6 +18,7 @@ interface interfpesquisa {
     id: number;
     tema: string;
     descricao: string;
+    total_respostas: number;
     status?: boolean;
 }
 
@@ -126,7 +127,7 @@ export default function pesquisa(props: interfProps) {
                          <p className="card-text">{pesquisa.descricao}</p>
                          <div className="text-center">
                          <button type="button" onClick={() => router.push(`/pesquisa/respostas/${pesquisa.id}`)}
-                            className="btn btn-primary btn-sm m-1"><BsEye/> Respostas</button>
+                            className="btn btn-primary btn-sm m-1">{pesquisa.total_respostas} Respostas</button>
 
                             <button type="button" className="btn btn-success btn-sm m-1"
                             onClick={() => {
