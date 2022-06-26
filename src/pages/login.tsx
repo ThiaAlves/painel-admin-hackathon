@@ -3,6 +3,7 @@ import { FormEvent, useCallback, useContext, useRef } from "react";
 import { AutenticacaoContext } from "../contexts/AutenticacaoContext";
 import { BsKey } from "react-icons/bs";
 import { useRouter } from 'next/router';
+import Swal from "sweetalert2";
 
 export default function Login() {
     const refForm = useRef<any>();
@@ -18,14 +19,22 @@ export default function Login() {
         if (refForm.current.checkValidity()) {
             let obj: any = new Object();
 
+
             for (let index = 0; index < refForm.current.length; index++) {
                 const id = refForm.current[index]?.id;
                 const value = refForm.current[index]?.value;
 
                 if (id === "botao") break;
                 obj[id] = value;
+
             }
             logar(obj);
+            Swal.fire(
+                'Logado com Sucesso!',
+                'Click em OK!',
+                'success'
+              )
+
         } else {
             refForm.current.classList.add("was-validated");
         }
