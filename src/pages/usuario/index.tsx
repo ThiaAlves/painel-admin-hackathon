@@ -7,8 +7,8 @@ import { useContext, useEffect, useState } from 'react';
 import { UsuariosContext } from '../../contexts/ListaUsuarioContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
-import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg } from 'react-icons/bs';
 import Swal from "sweetalert2";
+import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsShieldX, BsShieldFill, BsShieldCheck, BsPeopleFill } from 'react-icons/bs';
 
 interface interfProps {
     token?: string;
@@ -53,11 +53,27 @@ export default function Usuario(props: interfProps) {
             },
         })
             .then((res) => {
-                setUsuarios(res.data);
+                if(res.data.status === "Token is Expired"){
+                    //Adicionar Mensagem de Login Expirado
+                    alert("Token is Expired");
+                    router.push("/");
+                } else {
+                  setUsuarios(res.data);
+                }
             })
             .catch((erro) => {
                 console.log(erro);
             });
+    }
+
+    function getTipo(tipo){
+        if (tipo === 'admin') {
+            return <span className="badge bg-success"><BsShieldCheck/> Admin</span>
+        } else if (tipo === 'colaborador') {
+            return <span className="badge bg-warning"><BsShieldX/> Colaborador</span>
+        } else if (tipo === 'cliente') {
+            return <span className="badge bg-primary"><BsPeopleFill/> Cliente</span>
+        }
     }
 
     useEffect(() => {
@@ -92,6 +108,7 @@ export default function Usuario(props: interfProps) {
                             <th><BsHash/> ID</th>
                             <th><BsFillPersonFill/> Nome</th>
                             <th><BsMailbox/> E-mail</th>
+                            <th><BsShieldFill/> Tipo</th>
                             <th><BsGear/> Ações</th>
                         </tr>
                     </thead>
@@ -100,7 +117,8 @@ export default function Usuario(props: interfProps) {
                             <tr key={usuario.id}>
                                 <td width="10%" className="text-center">{usuario.id}</td>
                                 <td width="40%">{usuario.nome}</td>
-                                <td width="40%">{usuario.email}</td>
+                                <td width="30%">{usuario.email}</td>
+                                <td width="10%">{getTipo(usuario.tipo)}</td>
                                 <td width="10%">
                                     <button type="button" className="rounded-pill btn btn-primary btn-sm m-1"
                                     onClick={() => {

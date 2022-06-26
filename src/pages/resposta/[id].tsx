@@ -66,11 +66,25 @@ export default function Usuario(props: interfProps) {
             }).then((res) => {
 
                 if (res.data) {
-                    refForm.current['pessoa_id'].value = res.data[0].id_pessoa;
-                    refForm.current['pesquisa_id'].value = res.data[0].id_pesquisa;
-                    refForm.current['descricao'].value = res.data[0].descricao;
-                    refForm.current['perguntas'].value = res.data[0].perguntas;
-                    refForm.current['status_resposta'].value = res.data[0].status_resposta;
+                //Aqui dá pra fazer uma mensagem se res.data.status === "Token is Expired"
+
+
+                    var respostas = res.data.resposta.respostas;
+                    var perguntas = res.data.perguntas;
+                    // var respostas = res.data[0].respostas;
+                    // console.log(respostas);
+                    var resposta1 = respostas.split('|')[0];
+                    var resposta2 = respostas.split('|')[1];
+                    var resposta3 = respostas.split('|')[2];
+
+                    refForm.current['nome_pessoa'].value = res.data.resposta.nome_pessoa;
+                    refForm.current['tema_pesquisa'].value = res.data.resposta.tema_pesquisa;
+                    // refForm.current['descricao'].value = res.data[0].descricao;
+                    // refForm.current['perguntas'].value = res.data[0].perguntas;
+                    // refForm.current['status_resposta'].value = res.data[0].status_resposta;
+                    refForm.current['pergunta1'].value = perguntas[0];
+                    refForm.current['pergunta2'].value = perguntas[1];
+                    refForm.current['pergunta3'].value = perguntas[2];
                 }
 
             }).catch((erro) => {
@@ -116,13 +130,13 @@ export default function Usuario(props: interfProps) {
         <>
 
             <Head>
-                <title>{estaEditando ? 'Editar' : 'Cadastrar'} Resposta</title>
+                <title>{estaEditando ? 'Ver' : 'Cadastrar'} Resposta</title>
             </Head>
             <Menu
                 active='resposta'
                 token={props.token}
             >
-                <h2 className="pt-4">{estaEditando ? 'Editar' : 'Cadastrar'} Resposta</h2>
+                <h2 className="pt-4">{estaEditando ? 'Ver' : 'Cadastrar'} Resposta</h2>
 
                 <form
                     className='row g-3 needs-validation pt-4'
@@ -133,10 +147,10 @@ export default function Usuario(props: interfProps) {
                         className='col-md-12'
                     >
                         <label
-                            htmlFor='pessoa_id'
+                            htmlFor='nome_pessoa'
                             className='form-label'
                         >
-                            pessoa_id:
+                            Nome da Pessoa:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -144,8 +158,8 @@ export default function Usuario(props: interfProps) {
                             <input
                                 type='text'
                                 className='form-control'
-                                placeholder='Informe o pessoa_id'
-                                id="pessoa_id"
+                                placeholder='Informe o nome da pessoa'
+                                id="nome_pessoa"
                                 required
                             />
                         </div>
@@ -158,7 +172,7 @@ export default function Usuario(props: interfProps) {
                             htmlFor='pesquisa_id'
                             className='form-label'
                         >
-                            id_pesquisa:
+                            Tema da Pesquisa:
                         </label>
                         <div
                             className='input-group has-validation'
@@ -166,35 +180,9 @@ export default function Usuario(props: interfProps) {
                             <input
                                 type='text'
                                 className='form-control'
-                                placeholder='Informe o pessoa_id'
-                                id="pesquisa_id"
+                                id="tema_pesquisa"
                                 required
                             />
-                        </div>
-                    </div>
-
-                    <div
-                        className='col-md-12'
-                    >
-                        <label
-                            htmlFor='descricao'
-                            className='form-label'
-                        >
-                            Descrição:
-                        </label>
-                        <div
-                            className='input-group has-validation'
-                        >
-                            <textarea
-                                className='form-control'
-                                placeholder='Informe a descrição da pesquisa'
-                                id="descricao"
-                                required
-                                rows={3}
-                            />
-                            <div className='invalid-feedback'>
-                                Por favor, informe a descrição da Pesquisa.
-                            </div>
                         </div>
                     </div>
 
@@ -205,20 +193,38 @@ export default function Usuario(props: interfProps) {
                             htmlFor='pergunta1'
                             className='form-label'
                         >
-                            Pergunta 1:
+                            <span>Pergunta:</span>
                         </label>
                         <div
                             className='input-group has-validation'
                         >
-                            <input
-                                className='form-control'
-                                placeholder='Informe a primeira pergunta'
+                            <input readOnly={true}
+                                className='form-control bg-dark text-white'
                                 id="pergunta1"
                                 required
                             />
                             <div className='invalid-feedback'>
                                 Por favor, informe a primeira Pesquisa.
                             </div>
+                        </div>
+                    </div>
+
+                    <div
+                        className='col-md-12'
+                    >
+                        <label
+                            htmlFor='resposta1'
+                            className='form-label'
+                        >
+                            Resposta 1:
+                        </label>
+                        <div
+                            className='input-group has-validation'
+                        >
+                            <input readOnly={true}
+                                className='form-control bg-success text-white'
+                                id="resposta1"
+                            />
                         </div>
                     </div>
 
@@ -234,9 +240,8 @@ export default function Usuario(props: interfProps) {
                         <div
                             className='input-group has-validation'
                         >
-                            <input
-                                className='form-control'
-                                placeholder='Informe a segunda pergunta'
+                            <input readOnly={true}
+                                className='form-control bg-dark text-white'
                                 id="pergunta2"
                             />
                         </div>
@@ -246,7 +251,26 @@ export default function Usuario(props: interfProps) {
                         className='col-md-12'
                     >
                         <label
-                            htmlFor='pergunta3'
+                            htmlFor='resposta2'
+                            className='form-label'
+                        >
+                            Resposta 2:
+                        </label>
+                        <div
+                            className='input-group has-validation'
+                        >
+                            <input readOnly={true}
+                                className='form-control bg-success text-white'
+                                id="resposta2"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        className='col-md-12'
+                    >
+                        <label
+                            htmlFor='pergunta2'
                             className='form-label'
                         >
                             Pergunta 3:
@@ -254,14 +278,31 @@ export default function Usuario(props: interfProps) {
                         <div
                             className='input-group has-validation'
                         >
-                            <input
-                                className='form-control'
-                                placeholder='Informe a terceira pergunta'
+                            <input readOnly={true}
+                                className='form-control bg-dark text-white'
                                 id="pergunta3"
                             />
                         </div>
                     </div>
 
+                    <div
+                        className='col-md-12'
+                    >
+                        <label
+                            htmlFor='resposta2'
+                            className='form-label'
+                        >
+                            Resposta 3:
+                        </label>
+                        <div
+                            className='input-group has-validation'
+                        >
+                            <input readOnly={true}
+                                className='form-control bg-success text-white'
+                                id="resposta3"
+                            />
+                        </div>
+                    </div>
 
                     <div
                         className='col-md-12'

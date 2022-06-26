@@ -25,7 +25,7 @@ export const Menu = ({
                 <a
                     className="navbar-brand col-md-3 col-lg-2 me-0 px-3"
                 >
-                    Angle
+                    Angle - Admin
                 </a>
 
                 <div
