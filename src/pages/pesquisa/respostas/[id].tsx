@@ -8,6 +8,7 @@ import { PesquisasContext } from '../../../contexts/ListaPesquisaContext';
 import { useRouter } from 'next/router';
 import api from '../../../services/request';
 import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsEye, BsSearch, BsStars, BsArrowBarLeft, BsArrowLeft, BsShieldCheck, BsShieldX, BsXLg } from 'react-icons/bs';
+import Swal from 'sweetalert2';
 
 interface interfProps {
     token?: string;
@@ -64,6 +65,14 @@ export default function pesquisa(props: interfProps) {
             });
     }
 
+const [pergunta1, setPergunta1] = useState('');
+const [pergunta2, setPergunta2] = useState('');
+const [pergunta3, setPergunta3] = useState('');
+
+const [resposta1, setResposta1] = useState('');
+const [resposta2, setResposta2] = useState('');
+const [resposta3, setResposta3] = useState('');
+
     function getStatus(status) {
         if (status === 1) {
             return <span className="badge bg-success"><BsShieldCheck/> Normal</span>
@@ -73,13 +82,63 @@ export default function pesquisa(props: interfProps) {
     }
 
     function openModal(id, nome, tema, perguntas, respostas, status) {
+        setId_resposta(id);
+
+        setPergunta1(perguntas.split('|')[0]);
+        setPergunta2(perguntas.split('|')[1]);
+        setPergunta3(perguntas.split('|')[2]);
+
+        setResposta1(respostas.split('|')[0]);
+        setResposta2(respostas.split('|')[1]);
+        setResposta3(respostas.split('|')[2]);
 
         refForm.current['nome_pessoa'].value = nome;
         refForm.current['tema_pesquisa'].value = tema;
-        refForm.current['perguntas'].value = perguntas;
-        refForm.current['respostas'].value = respostas;
         refForm.current['status_resposta'].value = status;
+
 }
+
+const [status, setStatus] = useState('');
+const [id_resposta, setId_resposta] = useState('');
+
+
+
+
+    function updatePesquisa(){
+        event.preventDefault();
+
+        api.put(`atualizaResposta/${id_resposta}`, {
+            headers: {
+                Authorization: "Bearer " + props.token,
+            },
+            data: {
+                status: status,
+            }
+
+        }).then((res) => {
+            if (res.data.response === "sucesso") {
+                Swal.fire(
+                    'Atualizado com Sucesso!',
+                    'Registro atualizado com sucesso!',
+                    'success'
+                ).then(() => {
+                    findPesquisa();
+                }
+                );
+            } else {
+                Swal.fire(
+                    'Erro!',
+                    'Erro ao atualizar o registro!',
+                    'error'
+                ).then(() => {
+                    findPesquisa();
+                }
+                );
+            }
+        }).catch((erro) => {
+            console.log(erro);
+        });
+    }
 
 
 
@@ -100,7 +159,7 @@ export default function pesquisa(props: interfProps) {
                     <div
                         className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 border-bottom"
                     >
-                        <h3><BsSearch /> Respostas da Pesquisa: {pesquisas.map((pesquisa: interfpesquisa) => (pesquisa.tema_pesquisa))}</h3>
+                        <h3><BsSearch /> Respostas da Pesquisa: {pesquisas.length > 0 ? pesquisas[0].tema_pesquisa : ''}</h3>
                         <div
                             className="btn-toolbar mb-2 mb-md-0"
                         >
@@ -142,8 +201,8 @@ export default function pesquisa(props: interfProps) {
                                     <span aria-hidden="true"><BsXLg/></span>
                                 </button>
                             </div>
+                            <form ref={refForm} onSubmit={(e) => updatePesquisa()}>
                             <div className="modal-body">
-                                <form ref={refForm}>
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
@@ -154,16 +213,20 @@ export default function pesquisa(props: interfProps) {
                                             <label htmlFor="tema_pesquisa">Tema da Pesquisa:</label>
                                             <input type="text" className="form-control" id="tema_pesquisa" disabled />
                                             <div className="form-group">
-                                                <label htmlFor="perguntas"></label>
-                                                <textarea className="form-control" id="perguntas" rows={10} disabled></textarea>
+                                                <label htmlFor="perguntas">{pergunta1}:</label>
+                                                <input className="form-control" id="resposta1" value={resposta1} disabled></input>
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="respostas">Respostas:</label>
-                                                <textarea className="form-control" id="respostas" rows={10} disabled></textarea>
+                                                <label htmlFor="perguntas">{pergunta2}:</label>
+                                                <input className="form-control" id="resposta1" value={resposta3} disabled></input>
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="perguntas">{pergunta3}:</label>
+                                                <input className="form-control" id="resposta1" value={resposta3} disabled></input>
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="status_resposta">Status:</label>
-                                                <select className="form-control" id="status_resposta" disabled>
+                                                <select className="form-select" id="status_resposta" onChange={(e) => setStatus(e.target.value)} required>
                                                     <option value="1">Normal</option>
                                                     <option value="0">Pendente</option>
                                                 </select>
@@ -171,11 +234,12 @@ export default function pesquisa(props: interfProps) {
                                         </div>
                                     </div>
                                 </div>
-                                </form>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" className="btn btn-primary">Salvar</button>
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>

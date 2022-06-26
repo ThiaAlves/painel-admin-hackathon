@@ -4,45 +4,50 @@ import { GetServerSideProps } from "next";
 import { parseCookies } from 'nookies';
 import { validaPermissao } from '../../services/validaPermissao';
 import { useContext, useEffect, useState } from 'react';
-import { RespostasContext } from '../../contexts/ListaRespostaContext';
+import { PesquisasContext } from '../../contexts/ListaPesquisaContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
-import { BsTrash, BsPencil, BsGear, BsEye, BsFillPersonFill, BsHash, BsPlusLg, BsSearch, BsCalendarXFill, BsCalendar, BsCheck, BsXLg, BsClock } from 'react-icons/bs';
+import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsEye } from 'react-icons/bs';
+import Swal from "sweetalert2";
 
 interface interfProps {
     token?: string;
 }
 
-interface interfresposta {
+interface interfpesquisa {
     id: number;
-    pessoa: string;
-    pesquisa: string;
+    tema: string;
+    descricao: string;
     status?: string;
-    created_at?: Date;
 }
 
 
-export default function resposta(props: interfProps) {
+export default function pesquisa(props: interfProps) {
     const router = useRouter();
 
-    const [respostas, setrespostas] = useState<Array<interfresposta>>([]);
+    const [pesquisas, setpesquisas] = useState<Array<interfpesquisa>>([]);
 
-    function deleteUser(id: number) {
-        api.delete(`/respostas/${id}`, {
+    function deleteResearch(id: number) {
+        api.delete(`/pesquisas/${id}`, {
             headers: {
                 Authorization: "Bearer " + props.token,
             },
         })
             .then((res) => {
-                findResposta();
+                findPesquisa();
+                Swal.fire(
+                    'Deletado com Sucesso!',
+                    'Click em OK!',
+                    'error'
+                  )
             })
             .catch((erro) => {
                 console.log(erro);
             });
     }
 
-    function findResposta() {
-        api.get("/respostas", {
+    function findPesquisa() {
+        api.get("/pesquisas", {
             headers: {
                 Authorization: "Bearer " + props.token,
             },
@@ -51,59 +56,47 @@ export default function resposta(props: interfProps) {
                 if(res.data.status === "Token is Expired"){
                     //Adicionar Mensagem de Login Expirado
                     alert("Token is Expired");
-                    router.push("/");
+                    // Swal.fire({
+                    //     title: 'Token is Expired',
+                    //     text: '',
+                    //     icon: 'error',
+                    //     confirmButtonText: 'OK'
+                    // }).then(() => {
+                    //Voltar para a página de login
+                    //     router.push("/");
+                    // }
+                    // );
                 } else {
-                    setrespostas(res.data);
+                setpesquisas(res.data);
                 }
-
             })
             .catch((erro) => {
                 console.log(erro);
             });
     }
 
-    function horario(data: Date){
-        var data = new Date(data);
-        var dia = ("0" + data.getDate()).slice(-2);
-        var mes = ("0" + (data.getMonth() + 1)).slice(-2);
-        var ano = data.getFullYear();
-        var hora = ("0" + data.getHours()).slice(-2);
-        var min = ("0" + data.getMinutes()).slice(-2);
-        var seg = ("0" + data.getSeconds()).slice(-2);
-        var horario = dia + "/" + mes + "/" + ano + " " + hora + ":" + min + ":" + seg;
-        return <span className="text-muted">{horario}</span>
-    }
-
-    function getStatus(status) {
-        if (status === 1) {
-            return <span className="badge bg-success"><BsCheck/> Verificada</span>;
-        } else if (status === 0) {
-            return <span className="badge bg-warning"><BsClock/> Pendente</span>;
-        }
-    }
-
     useEffect(() => {
-        findResposta();
+        findPesquisa();
     }, []);
     return(
         <>
             <Head>
-                <title>Resposta</title>
+                <title>Pesquisa</title>
             </Head>
 
             <Menu
-                active='resposta'
+                active='pesquisa'
                 token={props.token}
             >
                 <>
                     <div
                         className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 border-bottom"
                     >
-                        <h2><BsFillPersonFill/> Respostas</h2>
+                        <h2><BsFillPersonFill/> Pesquisas</h2>
                         <div
                             className="btn-toolbar mb-2 mb-md-0"
                         >
-                            <button type="button" onClick={() => router.push('/resposta/novo')}
+                            <button type="button" onClick={() => router.push('/pesquisa/novo')}
                             className="btn btn-success rounded-pill"><BsPlusLg/> Adicionar</button>
                         </div>
                     </div>
@@ -112,31 +105,31 @@ export default function resposta(props: interfProps) {
                     <thead>
                         <tr>
                             <th><BsHash/> ID</th>
-                            <th><BsFillPersonFill/> Pessoa</th>
-                            <th><BsSearch/> Pesquisa</th>
-                            <th><BsCalendar/> Data de criação</th>
-                            <th><BsCheck/> Status</th>
+                            <th><BsFillPersonFill/> Tema</th>
+                            <th><BsFillPersonFill/> Descrição</th>
+                            <th><BsMailbox/> Status</th>
                             <th><BsGear/> Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {respostas.map((resposta: interfresposta) => (
-                            <tr key={resposta.id}>
-                                <td width="5%" className="text-center">{resposta.id}</td>
-                                <td width="20%">{resposta.pessoa}</td>
-                                <td width="30%">{resposta.pesquisa}</td>
-                                <td width="25%">{horario(resposta.created_at)}</td>
-                                <td width="10%">{getStatus(resposta.status)}</td>
+                        {pesquisas.map((pesquisa: interfpesquisa) => (
+                            <tr key={pesquisa.id}>
+                                <td width="10%" className="text-center">{pesquisa.id}</td>
+                                <td width="30%">{pesquisa.tema}</td>
+                                <td width="40%">{pesquisa.descricao}</td>
+                                <td width="10%">{pesquisa.status === '1' ? 'Ativo' : 'Inativo'}</td>
                                 <td width="10%">
-                                    <button type="button" className="rounded-pill btn btn-info btn-sm m-1"
+                                    <button type="button" onClick={() => router.push(`/pesquisa/respostas/${pesquisa.id}`)}
+                                    className="btn btn-success btn-sm m-1 rounded-pill"><BsEye/></button>
+                                    <button type="button" className="rounded-pill btn btn-primary btn-sm m-1"
                                     onClick={() => {
-                                        router.push(`/resposta/${resposta.id}`)
+                                        router.push(`/pesquisa/${pesquisa.id}`)
                                     }}
-                                    ><BsEye/></button>
-                                       <button hidden
+                                    ><BsPencil/></button>
+                                       <button
                                             className="rounded-pill btn btn-danger btn-sm m-1"
                                             onClick={() => {
-                                                deleteUser(resposta.id);
+                                                deleteResearch(pesquisa.id);
                                             }}
                                         >
                                             <BsTrash />

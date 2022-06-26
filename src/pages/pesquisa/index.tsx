@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import { PesquisasContext } from '../../contexts/ListaPesquisaContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
-import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsEye } from 'react-icons/bs';
+import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsEye, BsCheck, BsXLg } from 'react-icons/bs';
 import Swal from "sweetalert2";
 
 interface interfProps {
@@ -18,7 +18,7 @@ interface interfpesquisa {
     id: number;
     tema: string;
     descricao: string;
-    status?: string;
+    status?: boolean;
 }
 
 
@@ -56,16 +56,15 @@ export default function pesquisa(props: interfProps) {
                 if(res.data.status === "Token is Expired"){
                     //Adicionar Mensagem de Login Expirado
                     alert("Token is Expired");
-                    // Swal.fire({
-                    //     title: 'Token is Expired',
-                    //     text: '',
-                    //     icon: 'error',
-                    //     confirmButtonText: 'OK'
-                    // }).then(() => {
-                    //Voltar para a página de login
-                    //     router.push("/");
-                    // }
-                    // );
+                    Swal.fire({
+                        title: 'Token is Expired',
+                        text: '',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        router.push("/");
+                    }
+                    );
                 } else {
                 setpesquisas(res.data);
                 }
@@ -73,6 +72,14 @@ export default function pesquisa(props: interfProps) {
             .catch((erro) => {
                 console.log(erro);
             });
+    }
+
+    function getStatus(status: boolean){
+        if(status){
+            return <small className="badge bg-success rounded-pill"><BsCheck/></small>
+        } else {
+            return <small className="badge bg-secondary rounded-pill"><BsXLg/></small>
+        }
     }
 
     useEffect(() => {
@@ -101,44 +108,38 @@ export default function pesquisa(props: interfProps) {
                         </div>
                     </div>
                 </>
-                <table className="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th><BsHash/> ID</th>
-                            <th><BsFillPersonFill/> Tema</th>
-                            <th><BsFillPersonFill/> Descrição</th>
-                            <th><BsMailbox/> Status</th>
-                            <th><BsGear/> Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pesquisas.map((pesquisa: interfpesquisa) => (
-                            <tr key={pesquisa.id}>
-                                <td width="10%" className="text-center">{pesquisa.id}</td>
-                                <td width="30%">{pesquisa.tema}</td>
-                                <td width="40%">{pesquisa.descricao}</td>
-                                <td width="10%">{pesquisa.status === '1' ? 'Ativo' : 'Inativo'}</td>
-                                <td width="10%">
-                                    <button type="button" onClick={() => router.push(`/pesquisa/respostas/${pesquisa.id}`)}
-                                    className="btn btn-success btn-sm m-1 rounded-pill"><BsEye/></button>
-                                    <button type="button" className="rounded-pill btn btn-primary btn-sm m-1"
-                                    onClick={() => {
-                                        router.push(`/pesquisa/${pesquisa.id}`)
-                                    }}
-                                    ><BsPencil/></button>
-                                       <button
-                                            className="rounded-pill btn btn-danger btn-sm m-1"
-                                            onClick={() => {
-                                                deleteResearch(pesquisa.id);
-                                            }}
-                                        >
-                                            <BsTrash />
-                                        </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <div className="row">
+                {pesquisas.map((pesquisa: interfpesquisa) => (
+                   <div className="col-sm-4 p-2  ">
+                     <div className="card border border-primary shadow-lg w-100 h-100">
+                       <div className="card-body">
+                         <h5 className="card-title">
+                            <div className="row">
+                                <div className="col-12 col-md-8 col-sm-12 col-lg-10">
+                                    {pesquisa.tema}
+                                </div>
+                                <div className="col-12 col-md-3 col-sm-12 col-lg-2">
+                                    {getStatus(pesquisa.status)}
+                                </div>
+                            </div>
+                         </h5>
+                         <p className="card-text">{pesquisa.descricao}</p>
+                         <div className="text-center">
+                         <button type="button" onClick={() => router.push(`/pesquisa/respostas/${pesquisa.id}`)}
+                            className="btn btn-primary btn-sm m-1"><BsEye/> Respostas</button>
+
+                            <button type="button" className="btn btn-success btn-sm m-1"
+                            onClick={() => {
+                                router.push(`/pesquisa/${pesquisa.id}`)
+                            }
+                            }
+                            ><BsPencil/> Editar</button>
+                                </div>
+                       </div>
+                     </div>
+                   </div>
+                ))}
+                </div>
             </Menu>
         </>
     )

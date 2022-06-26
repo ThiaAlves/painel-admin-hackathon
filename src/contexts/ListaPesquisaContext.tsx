@@ -23,6 +23,7 @@ export type PropsPesquisasInput = Omit<InterDados, 'id'>
 
 interface InterPesquisasContext {
     Pesquisas: Array<InterDados>;
+    tema: string;
     criarPesquisas: (data: PropsPesquisasInput) => Promise<void>;
     editarPesquisas: InterfaceEditarPesquisas;
     funEditarPesquisas: (data: InterfaceEditarPesquisas) => void;
@@ -118,6 +119,7 @@ export function PesquisasProvider({ children }: InterProviderProps) {
     return (
         <PesquisasContext.Provider value={{
         Pesquisas, criarPesquisas,
+        tema: "Pesquisas",
         atualizarPesquisas,
         funEditarPesquisas, editarPesquisas,
         valoresPadraoEditarPesquisas, deletarPesquisas,
