@@ -1,38 +1,136 @@
 import Head from "next/head";
-import { FormEvent, useCallback, useContext, useRef } from "react";
 import { AutenticacaoContext } from "../contexts/AutenticacaoContext";
 import { BsKey, BsEnvelope } from "react-icons/bs";
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { Menu } from "../components/Menu";
+import api from "../services/request";
+import { validaPermissao } from "../services/validaPermissao";
+import { BsCheckLg, BsXLg } from "react-icons/bs";
+import Swal from "sweetalert2";
+interface interfProps {
+    token?: string;
+}
+// export default function Login() {
+//     const refForm = useRef<any>();
 
-export default function Login() {
-    const refForm = useRef<any>();
+//     const router = useRouter();
+
+//     const { logar } = useContext(AutenticacaoContext);
+
+//     const submitForm = useCallback((e: FormEvent) => {
+//         //não renderiza a pagina quando executa o submit do formulario
+//         e.preventDefault();
+
+//         if (refForm.current.checkValidity()) {
+//             let obj: any = new Object();
+
+//             for (let index = 0; index < refForm.current.length; index++) {
+//                 const id = refForm.current[index]?.id;
+//                 const value = refForm.current[index]?.value;
+
+//                 if (id === "botao") break;
+//                 obj[id] = value;
+//             }
+//             logar(obj);
+//         } else {
+//             refForm.current.classList.add("was-validated");
+//         }
+//     }, []);
+
+
+
+export default function Usuario(props: interfProps) {
 
     const router = useRouter();
 
-    const { logar } = useContext(AutenticacaoContext);
+    const refForm = useRef<any>();
+
+    const { id } = router.query;
+
+    const [estaEditando, setEstaEditando] = useState(false);
+
+
+
+    useEffect(() => {
+        const idParam = Number(id);
+
+        if(Number.isInteger(idParam)) {
+            setEstaEditando(true);
+
+            api.get('/pessoas/'+idParam, {
+                headers: {
+                    'Authorization': `Bearer ${props.token}`
+                }
+            }).then((res) => {
+
+                if(res.data) {
+                    refForm.current['nome'].value = res.data.nome;
+                    refForm.current['email'].value = res.data.email;
+                    refForm.current['telefone'].value = res.data.telefone;
+                    refForm.current['cpf'].value = res.data?.cpf || '';
+                    refForm.current['bairro'].value = res.data?.bairro || '';
+                    refForm.current['endereco'].value = res.data?.endereco || '';
+                    refForm.current['numero'].value = res.data?.numero || '';
+                    refForm.current['cep'].value = res.data?.cep || '';
+                    refForm.current['estado'].value = res.data?.estado || '';
+                    refForm.current['cidade'].value = res.data?.cidade || '';
+                    refForm.current['password'].value = res.data?.password || '';
+                }
+
+            }).catch((erro) => {
+                console.log(erro);
+            })
+        }
+    }, [])
 
     const submitForm = useCallback((e: FormEvent) => {
-        //não renderiza a pagina quando executa o submit do formulario
+        <script src="sweetalert2.all.min.js"></script>
         e.preventDefault();
 
         if (refForm.current.checkValidity()) {
-            let obj: any = new Object();
+
+            let obj: any = new Object;
 
             for (let index = 0; index < refForm.current.length; index++) {
                 const id = refForm.current[index]?.id;
                 const value = refForm.current[index]?.value;
 
-                if (id === "botao") break;
+                if(id === 'botao') break;
                 obj[id] = value;
+
             }
-            logar(obj);
+
+            api.post('/registro/', obj, {
+
+            })
+            .then((res) =>
+            {
+                router.push('/login');
+
+                Swal.fire(
+                    'Cadastrado com Sucesso!',
+                    'Click em OK, e faça o Login!',
+                    'success'
+                  )
+                // alert("Usuario Cadastrado com Sucesso!");
+
+            }).catch((erro) => {
+                console.log(erro);
+            });
+
         } else {
-            refForm.current.classList.add("was-validated");
+            refForm.current.classList.add('was-validated');
         }
-    }, []);
+    }, [])
 
     return (
         <>
+            <script src="sweetalert2.min.js"></script>
+            <link rel="stylesheet" href="sweetalert2.min.css"></link>
+
             <Head>
                 <title>Registro</title>
             </Head>
