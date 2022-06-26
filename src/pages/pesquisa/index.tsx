@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import { PesquisasContext } from '../../contexts/ListaPesquisaContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
-import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg } from 'react-icons/bs';
+import { BsTrash, BsPencil, BsGear, BsMailbox, BsFillPersonFill, BsHash, BsPlusLg, BsEye } from 'react-icons/bs';
 
 interface interfProps {
     token?: string;
@@ -113,6 +113,8 @@ export default function pesquisa(props: interfProps) {
                                 <td width="40%">{pesquisa.descricao}</td>
                                 <td width="10%">{pesquisa.status === '1' ? 'Ativo' : 'Inativo'}</td>
                                 <td width="10%">
+                                    <button type="button" onClick={() => router.push(`/pesquisa/respostas/${pesquisa.id}`)}
+                                    className="btn btn-success btn-sm m-1 rounded-pill"><BsEye/></button>
                                     <button type="button" className="rounded-pill btn btn-primary btn-sm m-1"
                                     onClick={() => {
                                         router.push(`/pesquisa/${pesquisa.id}`)
