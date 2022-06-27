@@ -77,6 +77,14 @@ export default function Usuario(props: interfProps) {
         }
     }
 
+    function formataRespostas(total, id) {
+        if (total === 0) {
+            return <button className="btn btn-sm btn-secondary" disabled>0</button>
+        } else {
+            return <button className="btn btn-sm btn-primary" onClick={() => router.push(`/usuario/resposta/${id}`)}>{total}</button>
+        }
+    }
+
     useEffect(() => {
         findUser();
     }, []);
@@ -121,7 +129,7 @@ export default function Usuario(props: interfProps) {
                                 <td width="30%">{usuario.nome}</td>
                                 <td width="20%">{usuario.email}</td>
                                 <td width="10%">{getTipo(usuario.tipo)}</td>
-                                <td width="15%" className="text-center">{usuario.total_pesquisas_respondidas}</td>
+                                <td width="15%" className="text-center">{formataRespostas(usuario.total_pesquisas_respondidas, usuario.id)}</td>
                                 <td width="15%">
                                     <button type="button" className="rounded-pill btn btn-primary btn-sm m-1"
                                     onClick={() => {

@@ -108,7 +108,10 @@ export default function Usuario(props: interfProps) {
 
                 if (id === 'botao') break;
                 obj[id] = value;
-
+                console.log(obj);
+            }
+            if(obj.id === 'novo') {
+                obj.id = "";
             }
 
             api.post('/pesquisas/', obj, {
@@ -119,11 +122,10 @@ export default function Usuario(props: interfProps) {
                 .then((res) => {
                     Swal.fire(
                         'Salvo com Sucesso!',
-                        'Click em OK!',
-                        'success'
-                      )
+                        res.data.message,
+                        'success',
+                    );
                     router.push('/pesquisa');
-
                 }).catch((erro) => {
                     console.log(erro);
                 });
@@ -150,6 +152,19 @@ export default function Usuario(props: interfProps) {
                     noValidate
                     ref={refForm}
                 >
+                    <div className="col-md-6">
+                        <div className="form-group">
+                            <label htmlFor="id">ID</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="id"
+                                value={id}
+                                readOnly
+                            />
+                        </div>
+                    </div>
+
                     <div
                         className='col-md-12'
                     >

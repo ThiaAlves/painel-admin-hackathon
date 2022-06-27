@@ -111,7 +111,7 @@ export default function pesquisa(props: interfProps) {
                 </>
                 <div className="row">
                 {pesquisas.map((pesquisa: interfpesquisa) => (
-                   <div className="col-sm-4 p-2  ">
+                   <div className="col-sm-4 p-2" key={pesquisa.id}>
                      <div className="card border border-primary shadow-lg w-100 h-100">
                        <div className="card-body">
                          <h5 className="card-title">

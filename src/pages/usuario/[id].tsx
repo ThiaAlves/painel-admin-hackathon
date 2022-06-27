@@ -38,6 +38,7 @@ export default function Usuario(props: interfProps) {
                 obj[id] = value;
             }
 
+
             api.put(`/pessoas/${id}`, obj, {
                 headers: {
                     'Authorization': `Bearer ${props.token}`
@@ -104,6 +105,10 @@ export default function Usuario(props: interfProps) {
 
             }
 
+            if(obj.id === 'novo') {
+                obj.id = "";
+            }
+
             api.post('/pessoas/', obj, {
                 headers: {
                     'Authorization': `Bearer ${props.token}`
@@ -111,12 +116,13 @@ export default function Usuario(props: interfProps) {
             })
             .then((res) =>
             {
-                router.push('/usuario');
+
                 Swal.fire(
                     'Criado com Sucesso!',
-                    'Click em OK!',
+                    res.data.message,
                     'success'
                 )
+                router.push('/usuario');
 
             }).catch((erro) => {
                 console.log(erro);
@@ -151,6 +157,19 @@ export default function Usuario(props: interfProps) {
                     noValidate
                 ref={refForm}
                 >
+
+                    <div className="col-md-6" hidden>
+                        <div className="form-group">
+                            <label htmlFor="id">ID</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="id"
+                                readOnly
+                                value={id}
+                            />
+                        </div>
+                        </div>
                     <div
                         className='col-md-6'
                     >
@@ -299,7 +318,11 @@ export default function Usuario(props: interfProps) {
                                             setLocalidade(res.neighborhood, res.city, res.state, res.street);
                                     }).catch(err => {
                                         //Colocar alerta para mensagem de erro
-                                        alert(err);
+                                        Swal.fire(
+                                            'Erro',
+                                            'CEP não encontrado',
+                                            'error'
+                                        )
                                     });
                                 }
                                 }
