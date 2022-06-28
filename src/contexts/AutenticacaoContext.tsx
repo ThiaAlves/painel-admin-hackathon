@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { createContext, ReactNode, useState } from "react";
 import { setCookie } from "nookies";
 import Swal from "sweetalert2";
+import jwt_decode from 'jwt-decode';
+
 
 
 interface InterDados {
@@ -35,7 +37,20 @@ export function AutenticacaoProvider({children}: InterProviderProps) {
                 'painel-token',
                 resultado.data.access_token
             )
-            router.push('/dashboard');
+
+            const user = jwt_decode<{
+                email: string,
+                id: number,
+                nome: string,
+                tipo: string
+            }>(resultado.data.access_token);
+
+            if(user.tipo === 'admin'){
+                router.push('/dashboard');
+            } else {
+                router.push('/respondidas');
+            }
+
             }
         } catch (error) {
             Swal.fire({
