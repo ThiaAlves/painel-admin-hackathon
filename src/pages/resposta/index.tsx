@@ -8,6 +8,7 @@ import { RespostasContext } from '../../contexts/ListaRespostaContext';
 import { useRouter } from 'next/router';
 import api from '../../services/request';
 import { BsTrash, BsPencil, BsGear, BsEye, BsFillPersonFill, BsHash, BsPlusLg, BsSearch, BsCalendarXFill, BsCalendar, BsCheck, BsXLg, BsClock } from 'react-icons/bs';
+import Swal from 'sweetalert2';
 
 interface interfProps {
     token?: string;
@@ -48,10 +49,17 @@ export default function resposta(props: interfProps) {
             },
         })
             .then((res) => {
-                if(res.data.status === "Token is Expired"){
+                if (res.data.status === "Token is Expired") {
                     //Adicionar Mensagem de Login Expirado
-                    alert("Token is Expired");
-                    router.push("/");
+                    Swal.fire({
+                        title: 'Token Expirado!',
+                        text: '',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        router.push("/");
+                    }
+                    );
                 } else {
                     setrespostas(res.data);
                 }
@@ -62,7 +70,7 @@ export default function resposta(props: interfProps) {
             });
     }
 
-    function horario(data: Date){
+    function horario(data: Date) {
         var data = new Date(data);
         var dia = ("0" + data.getDate()).slice(-2);
         var mes = ("0" + (data.getMonth() + 1)).slice(-2);
@@ -76,16 +84,16 @@ export default function resposta(props: interfProps) {
 
     function getStatus(status) {
         if (status === 1) {
-            return <span className="badge bg-success"><BsCheck/> Verificada</span>;
+            return <span className="badge bg-success"><BsCheck /> Verificada</span>;
         } else if (status === 0) {
-            return <span className="badge bg-warning"><BsClock/> Pendente</span>;
+            return <span className="badge bg-warning"><BsClock /> Pendente</span>;
         }
     }
 
     useEffect(() => {
         findResposta();
     }, []);
-    return(
+    return (
         <>
             <Head>
                 <title>Resposta</title>
@@ -99,24 +107,24 @@ export default function resposta(props: interfProps) {
                     <div
                         className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 border-bottom"
                     >
-                        <h2><BsFillPersonFill/> Respostas</h2>
+                        <h2><BsFillPersonFill /> Respostas</h2>
                         <div
                             className="btn-toolbar mb-2 mb-md-0"
                         >
                             <button type="button" onClick={() => router.push('/resposta/novo')}
-                            className="btn btn-success rounded-pill"><BsPlusLg/> Adicionar</button>
+                                className="btn btn-success rounded-pill"><BsPlusLg /> Adicionar</button>
                         </div>
                     </div>
                 </>
                 <table className="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th><BsHash/> ID</th>
-                            <th><BsFillPersonFill/> Pessoa</th>
-                            <th><BsSearch/> Pesquisa</th>
-                            <th><BsCalendar/> Data de criação</th>
-                            <th><BsCheck/> Status</th>
-                            <th><BsGear/> Ações</th>
+                            <th><BsHash /> ID</th>
+                            <th><BsFillPersonFill /> Pessoa</th>
+                            <th><BsSearch /> Pesquisa</th>
+                            <th><BsCalendar /> Data de criação</th>
+                            <th><BsCheck /> Status</th>
+                            <th><BsGear /> Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -129,18 +137,18 @@ export default function resposta(props: interfProps) {
                                 <td width="10%">{getStatus(resposta.status)}</td>
                                 <td width="10%">
                                     <button type="button" className="rounded-pill btn btn-info btn-sm m-1"
-                                    onClick={() => {
-                                        router.push(`/resposta/${resposta.id}`)
-                                    }}
-                                    ><BsEye/></button>
-                                       <button hidden
-                                            className="rounded-pill btn btn-danger btn-sm m-1"
-                                            onClick={() => {
-                                                deleteUser(resposta.id);
-                                            }}
-                                        >
-                                            <BsTrash />
-                                        </button>
+                                        onClick={() => {
+                                            router.push(`/resposta/${resposta.id}`)
+                                        }}
+                                    ><BsEye /></button>
+                                    <button hidden
+                                        className="rounded-pill btn btn-danger btn-sm m-1"
+                                        onClick={() => {
+                                            deleteUser(resposta.id);
+                                        }}
+                                    >
+                                        <BsTrash />
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -153,7 +161,7 @@ export default function resposta(props: interfProps) {
 
 export const getServerSideProps: GetServerSideProps = async (contexto) => {
 
-    const {'painel-token': token} = parseCookies(contexto);
+    const { 'painel-token': token } = parseCookies(contexto);
 
     // console.log(token)
 

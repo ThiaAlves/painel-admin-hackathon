@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { FormEvent, useCallback, useContext, useRef } from "react";
 import { AutenticacaoContext } from "../contexts/AutenticacaoContext";
-import { BsKey } from "react-icons/bs";
+import { BsArrowRight, BsCardImage, BsCardText, BsKey } from "react-icons/bs";
 import { useRouter } from 'next/router';
 import Swal from "sweetalert2";
 
@@ -29,11 +29,6 @@ export default function Login() {
 
             }
             logar(obj);
-            Swal.fire(
-                'Logado com Sucesso!',
-                'Click em OK!',
-                'success'
-              )
 
         } else {
             refForm.current.classList.add("was-validated");
@@ -131,7 +126,7 @@ export default function Login() {
                                     id="botao"
                                     onClick={(e) => submitForm(e)}
                                 >
-                                    Enviar
+                                    Enviar <BsArrowRight />
                                 </button>
                             </div>
                             <div className="col-md-6 col-button">
@@ -141,7 +136,7 @@ export default function Login() {
                                     id="botao"
                                     onClick={() => router.push('/registro')}
                                 >
-                                    Registrar
+                                    Registrar <BsCardText />
                                 </button>
                             </div>
                         </div>

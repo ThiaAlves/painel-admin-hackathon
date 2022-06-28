@@ -76,6 +76,8 @@ const [resposta3, setResposta3] = useState('');
     function getStatus(status) {
         if (status === 1) {
             return <span className="badge bg-success"><BsShieldCheck/> Normal</span>
+        } else if (status === 2) {
+            return <span className="badge bg-danger"><BsShieldX/> Problema</span>
         } else {
             return <span className="badge bg-warning"><BsShieldX/> Pendente</span>
         }
@@ -106,8 +108,10 @@ const [id_resposta, setId_resposta] = useState('');
 
     function updatePesquisa(){
         event.preventDefault();
-
-        api.post(`atualizaResposta/${id_resposta}`, {
+        var obj = {
+            status: status,
+        }
+        api.post(`atualizaResposta/${id_resposta}`, obj, {
             headers: {
                 Authorization: "Bearer " + props.token,
             },
@@ -116,10 +120,11 @@ const [id_resposta, setId_resposta] = useState('');
             }
 
         }).then((res) => {
-            if (res.data.response === "sucesso") {
+            console.log(res.data.success);
+            if (res.data.success == true) {
                 Swal.fire(
                     'Atualizado com Sucesso!',
-                    'Registro atualizado com sucesso!',
+                    res.data.message,
                     'success'
                 ).then(() => {
                     findPesquisa();
@@ -186,7 +191,7 @@ const [id_resposta, setId_resposta] = useState('');
                                 <td width="20%">{getStatus(pesquisa.status_resposta)}</td>
                                 <td width="10%">
                                     <button type="button" onClick={() => openModal(pesquisa.id_resposta, pesquisa.nome_pessoa, pesquisa.tema_pesquisa, pesquisa.perguntas, pesquisa.respostas, pesquisa.status_resposta)}
-                                        className="btn btn-success btn-sm m-1 rounded-pill" title="Visualizar" data-bs-toggle="modal" data-bs-target="#modal-resposta"><BsEye /></button>
+                                        className="btn btn-primary btn-sm m-1 rounded-pill" title="Visualizar" data-bs-toggle="modal" data-bs-target="#modal-resposta"><BsEye /></button>
                                 </td>
                             </tr>
                         ))}
@@ -198,7 +203,7 @@ const [id_resposta, setId_resposta] = useState('');
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title" id="modal-resposta-label">Resposta</h5>
-                                <button type="button" className="btn btn-sm btn-secondary close" data-dismiss="modal" aria-label="Fechar">
+                                <button type="button" className="btn btn-sm btn-secondary close" data-bs-dismiss="modal" aria-label="Fechar">
                                     <span aria-hidden="true"><BsXLg/></span>
                                 </button>
                             </div>
@@ -230,6 +235,7 @@ const [id_resposta, setId_resposta] = useState('');
                                                 <select className="form-select" id="status_resposta" onChange={(e) => setStatus(e.target.value)} required>
                                                     <option value="1">Normal</option>
                                                     <option value="0">Pendente</option>
+                                                    <option value="2">Problema</option>
                                                 </select>
                                             </div>
                                         </div>

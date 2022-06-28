@@ -152,7 +152,7 @@ export default function Usuario(props: interfProps) {
                     noValidate
                     ref={refForm}
                 >
-                    <div className="col-md-6">
+                    <div className="col-md-6" hidden>
                         <div className="form-group">
                             <label htmlFor="id">ID</label>
                             <input

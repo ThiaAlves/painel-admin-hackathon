@@ -2,6 +2,7 @@ import api from "../services/request";
 import { useRouter } from "next/router";
 import { createContext, ReactNode, useState } from "react";
 import { setCookie } from "nookies";
+import Swal from "sweetalert2";
 
 
 interface InterDados {
@@ -27,16 +28,22 @@ export function AutenticacaoProvider({children}: InterProviderProps) {
         try {
             let resultado = await api.post('/login', dados)
 
-            console.log(resultado)
+            if(resultado.data.access_token !== undefined){
+
             setCookie(
                 undefined,
                 'painel-token',
                 resultado.data.access_token
             )
             router.push('/dashboard');
-
+            }
         } catch (error) {
-
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Email ou senha incorretos',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
             console.log(error)
         }
     }

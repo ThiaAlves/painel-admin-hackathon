@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { AutenticacaoContext } from "../contexts/AutenticacaoContext";
-import { BsKey, BsEnvelope } from "react-icons/bs";
+import { BsKey, BsEnvelope, BsArrowLeft, BsCheck } from "react-icons/bs";
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
@@ -10,6 +10,7 @@ import api from "../services/request";
 import { validaPermissao } from "../services/validaPermissao";
 import { BsCheckLg, BsXLg } from "react-icons/bs";
 import Swal from "sweetalert2";
+import cep from "cep-promise";
 interface interfProps {
     token?: string;
 }
@@ -126,6 +127,14 @@ export default function Usuario(props: interfProps) {
         }
     }, [])
 
+    function setLocalidade(bairro: string, cidade: string, estado: string, endereco: string) {
+        refForm.current['bairro'].value = bairro;
+        refForm.current['cidade'].value = cidade;
+        refForm.current['estado'].value = estado;
+        refForm.current['endereco'].value = endereco;
+        refForm.current['numero'].focus();
+    }
+
     return (
         <>
             <script src="sweetalert2.min.js"></script>
@@ -231,43 +240,6 @@ export default function Usuario(props: interfProps) {
                             </div>
                         </div>
                         <div className="d-flex col-md-12">
-                            <div className="p-1 col-md-9">
-                                <label htmlFor="endereco" className="form-label">
-                                    Endereço
-                                </label>
-                                <div className="input-group has-validation">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Digite o endereço"
-                                        id="endereco"
-                                        required
-                                    />
-                                    <div className="invalid-feedback">
-                                        Por favor, digite seu Endereço.
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-1 col-md-3">
-                                <label htmlFor="numero" className="form-label">
-                                    Numero
-                                </label>
-                                <div className="input-group has-validation">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Digite o numero"
-                                        id="numero"
-                                        required
-                                    />
-                                    <div className="invalid-feedback">
-                                        Por favor, digite seu Numero.
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="d-flex col-md-12">
                             <div className="p-1 col-md-3">
                                 <label htmlFor="cep" className="form-label">
                                     CEP
@@ -279,6 +251,22 @@ export default function Usuario(props: interfProps) {
                                         placeholder="Digite o cep"
                                         id="cep"
                                         required
+                                        onKeyUp={(e) => {
+                                            const target = e.target as HTMLInputElement;
+                                            if(target.value.length === 8){
+                                                cep(target.value).then(res => {
+                                                    setLocalidade(res.neighborhood, res.city, res.state, res.street);
+                                            }).catch(err => {
+                                                //Colocar alerta para mensagem de erro
+                                                Swal.fire(
+                                                    'Erro',
+                                                    'CEP não encontrado',
+                                                    'error'
+                                                )
+                                            });
+                                        }
+                                    }
+                                        }
                                     />
                                     <div className="invalid-feedback">
                                         Por favor, digite seu CEP.
@@ -338,6 +326,44 @@ export default function Usuario(props: interfProps) {
                             </div>
                         </div>
                         <div className="d-flex col-md-12">
+                            <div className="p-1 col-md-9">
+                                <label htmlFor="endereco" className="form-label">
+                                    Endereço
+                                </label>
+                                <div className="input-group has-validation">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Digite o endereço"
+                                        id="endereco"
+                                        required
+                                    />
+                                    <div className="invalid-feedback">
+                                        Por favor, digite seu Endereço.
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="p-1 col-md-3">
+                                <label htmlFor="numero" className="form-label">
+                                    Numero
+                                </label>
+                                <div className="input-group has-validation">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Digite o numero"
+                                        id="numero"
+                                        required
+                                    />
+                                    <div className="invalid-feedback">
+                                        Por favor, digite seu Numero.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="d-flex col-md-12">
                         <div className="p-1 col-md-6">
                             <label htmlFor="email" className="form-label">
                                 Email
@@ -383,12 +409,12 @@ export default function Usuario(props: interfProps) {
                         <div className="d-flex col-md-12">
                             <div className="col-md-6 col-button">
                                 <button
-                                    className="btn btn-primary mt-3 form-control rounded-pill"
+                                    className="btn btn-success mt-3 form-control rounded-pill"
                                     type="button"
                                     id="botao"
                                     onClick={(e) => submitForm(e)}
                                 >
-                                    Registrar
+                                    Registrar <BsCheckLg />
                                 </button>
                             </div>
                             <div className="col-md-6 col-button">
@@ -398,7 +424,7 @@ export default function Usuario(props: interfProps) {
                                     id="botao"
                                     onClick={() => router.push('/login')}
                                 >
-                                    Voltar
+                                    Voltar <BsArrowLeft />
                                 </button>
                             </div>
                         </div>

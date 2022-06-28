@@ -26,10 +26,32 @@ export default function Dashboard(props: interfProps) {
                         className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 border-bottom"
                     >
                         <h2>Dashboard</h2>
-                        <div
-                            className="btn-toolbar mb-2 mb-md-0"
-                        >
-                            <button type="button" className="btn btn-dark rounded-pill">Teste</button>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-3 rounded shadow-lg">
+                        <iframe src="http://187.87.223.235:3000/d-solo/B-Wjqp3nk/dashboard-angle?orgId=1&from=1656351616091&to=1656373216091&panelId=2" width="100%" height="100%"></iframe>
+                        </div>
+                        <div className="col-md-3 rounded shadow-lg">
+                        <iframe src="http://187.87.223.235:3000/d-solo/B-Wjqp3nk/dashboard-angle?orgId=1&from=1656352010147&to=1656373610147&panelId=5" width="100%" height="100%"></iframe>
+                        </div>
+                        <div className="col-md-3 rounded shadow-lg">
+                        <iframe src="http://187.87.223.235:3000/d-solo/B-Wjqp3nk/dashboard-angle?orgId=1&from=1656352116675&to=1656373716675&panelId=4" width="100%" height="100%"></iframe>
+                        </div>
+                        <div className="col-md-3 rounded shadow-lg">
+                        <iframe src="http://187.87.223.235:3000/d-solo/B-Wjqp3nk/dashboard-angle?orgId=1&from=1656352165658&to=1656373765658&panelId=3" width="100%" height="100%"></iframe>
+                        </div>
+                    </div>
+                    <div className="row pt-3">
+                        <div className="col-md-8 rounded shadow-lg">
+                        <iframe src="http://187.87.223.235:3000/d-solo/B-Wjqp3nk/dashboard-angle?orgId=1&from=1656352325841&to=1656373925841&panelId=7" width="100%" height="400px"></iframe>
+                        </div>
+                        <div className="col-md-4 rounded shadow-lg">
+                        <iframe src="http://187.87.223.235:3000/d-solo/B-Wjqp3nk/dashboard-angle?orgId=1&from=1656352362882&to=1656373962882&panelId=9" width="100%" height="400px"></iframe>
+                            </div>
+                    </div>
+                    <div className="row pt-3">
+                        <div className="col-md-12 rounded shadow-lg">
+                        <iframe src="http://187.87.223.235:3000/d-solo/B-Wjqp3nk/dashboard-angle?orgId=1&from=1656354198122&to=1656375798122&panelId=11" width="100%" height="1000px"></iframe>
                         </div>
                     </div>
                 </>

@@ -80,6 +80,7 @@ export default function Usuario(props: interfProps) {
                     refForm.current['cep'].value = res.data?.cep || '';
                     refForm.current['estado'].value = res.data?.estado || '';
                     refForm.current['cidade'].value = res.data?.cidade || '';
+                    refForm.current['status'].selectedIndex = res.data?.status === 'Ativo' ? 0 : 1;
 
                 }
 
@@ -234,7 +235,7 @@ export default function Usuario(props: interfProps) {
                             className='input-group has-validation'
                         >
                             <input
-                                type='number'
+                                type='text'
                                 className='form-control'
                                 placeholder='Digite o telefone'
                                 id="telefone"
@@ -461,13 +462,13 @@ export default function Usuario(props: interfProps) {
 
 
                     <div
-                        className='col-md-12'
+                        className='col-md-9'
                     >
                         <label
                             htmlFor='password'
                             className='form-label'
                         >
-                            Senha
+                            Senha:
                         </label>
                         <input
                             type="password"
@@ -480,8 +481,20 @@ export default function Usuario(props: interfProps) {
                             Por favor, digite sua senha.
                         </div>
                     </div>
+                    <div className='col-md-3'>
+                        <label
+                        htmlFor='status' className="form-label">Status:</label>
+                        <select className="form-select" defaultValue={""} id='status' required>
+                            <option value={""} >Selecione o status</option>
+                            <option value="1">Ativo</option>
+                            <option value="0">Inativo</option>
+                        </select>
+                        <div className='invalid-feedback'>
+                            Por favor, selecione o status.
+                        </div>
+                    </div>
                     <div
-                        className='col-md-12'
+                        className='col-md-12 pt-4'
                     >
 
                 <div className=' text-end'>

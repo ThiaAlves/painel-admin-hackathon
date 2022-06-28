@@ -25,6 +25,7 @@ interface interfUsuario {
     telefone: string;
     tipo: string;
     total_pesquisas_respondidas: number;
+    status?: string;
 }
 
 
@@ -56,8 +57,15 @@ export default function Usuario(props: interfProps) {
             .then((res) => {
                 if(res.data.status === "Token is Expired"){
                     //Adicionar Mensagem de Login Expirado
-                    alert("Token is Expired");
-                    router.push("/");
+                    Swal.fire({
+                        title: 'Token Expirado!',
+                        text: '',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        router.push("/");
+                    }
+                    );
                 } else {
                   setUsuarios(res.data);
                 }
@@ -82,6 +90,14 @@ export default function Usuario(props: interfProps) {
             return <button className="btn btn-sm btn-secondary" disabled>0</button>
         } else {
             return <button className="btn btn-sm btn-primary" onClick={() => router.push(`/usuario/resposta/${id}`)}>{total}</button>
+        }
+    }
+
+    function getStatus(status) {
+        if (status == '1') {
+            return " bg-success"
+        } else {
+            return " bg-warning"
         }
     }
 
